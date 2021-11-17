@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+            <h:commandButton title="Добавить поставляемый товар"
+                             id="showCreateProductPanelButton"
+                             value="Добавить товар"
+                             rendered="#{!directorBean.enableEditProductPanel}"
+                             ajax="true"
+                             actionListener="#{directorBean.enableAddProductPanel}"
+                             process="createProductPanel @this"
+                             update="createProductPanel @this">
+            </h:commandButton>
+        <h:dataTable id="prouctsTheProvider"
+                     var="product"
+                     rowKey="#{product.id}"
+                     value="#{directorBean.currentProvider.productList}"
+                     rowIndexVar="rowNum"
+                     emptyMessage="..."
+                     styleClass="table"
+                     selectionMode="single">
+            <h:column headerText="№" width="20">
+                <h:outputText value="#{rowNum + 1}"/>
+            </h:column>
+            <h:column headerText="Название" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{product.name}"/>
+            </h:column>
+            <h:column headerText="Тип продукта" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{product.type.name}"/>
+            </h:column>
+            <h:column headerText="Цена закупки" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{product.purchasePrice}"/>
+            </h:column>
+            <h:column headerText="Цена продажи" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{product.sellingPrice}"/>
+            </h:column>
+            <h:column headerText="Дата изготовления" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{product.manufactureDate}"/>
+            </h:column>
+            <h:column headerText="Страна-изготовитель" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{product.manufacturerCountry.name}"/>
+            </h:column>
+            <h:column headerText="Срок годности" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{product.shelfLife}"/>
+            </h:column>
+            <h:column headerText="Количество" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{product.amount}"/>
+            </h:column>
+            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                    <h:commandButton title="Редактировать товар"
+                                     value="Редактировать"
+                                     ajax="true"
+                                     actionListener="#{directorBean.startUpdateProduct(product)}"
+                                     process="prouctsTheProvider"
+                                     update="prouctsTheProvider">
+                    </h:commandButton>
+            </h:column>
+            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                    <h:commandButton title="Удалить продукт"
+                                     value="Удалить"
+                                     ajax="true"
+                                     actionListener="#{directorBean.deleteProduct(product)}"
+                                     process="@this prouctsTheProvider"
+                                     update="@this prouctsTheProvider">
+                    </h:commandButton>
+            </h:column>
+        </h:dataTable>
+    </p:outputPanel>
+</ui:composition>

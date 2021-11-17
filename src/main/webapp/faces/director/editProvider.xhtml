@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:form id="registrationForm">
+            <h:outputLabel value="Название"/>
+
+            <h:inputText id="regProviderName" styleClass="fullInput"
+                         value="#{directorBean.currentProvider.name}"/>
+
+            <h:outputLabel value="Страна"/>
+
+            <h:selectOneMenu value="#{directorBean.currentProvider.country}">
+                <f:selectItems value="#{directorBean.countryTypes}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="Адрес"/>
+
+            <h:inputText id="regAddress" styleClass="fullInput"
+                         value="#{directorBean.currentProvider.address}"/>
+
+            <h:outputLabel value="Среднее время поставок (дней)"/>
+
+            <h:inputText id="regDeliveryDays" styleClass="fullInput"
+                         value="#{directorBean.currentProvider.deliveryDays}"/>
+            <h:messages style = "color:red;margin:8px;" />
+
+            <h:commandButton id="providerRegistration" actionListener="#{directorBean.createProvider()}" value="Зарегистрировать поставщика" rendered="#{directorBean.creatingProvider}" process="@this showCreatePanelButton"/>
+            <h:commandButton id="providerUpdate" actionListener="#{directorBean.updateProvider()}" value="Обновить поставщика" rendered="#{directorBean.updatingProvider}"  process="@this"/>
+            <h:commandButton id="cancelRegistration" actionListener="#{directorBean.disableCreatePanel}" value="Отмена" process="@this showCreatePanelButton"/>
+
+            <ui:include src="productsTable.xhtml"/>
+
+            <h:panelGrid id="productPanel" rendered="#{directorBean.enableEditProductPanel}">
+                <ui:include src="editProduct.xhtml"/>
+            </h:panelGrid>
+
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

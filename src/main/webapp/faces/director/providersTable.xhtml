@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:form id="showCreatePanelButton">
+            <h:commandButton title="Добавить нового поставщика"
+                             value="Новый поставщик"
+                             rendered="#{!directorBean.enableEditProviderPanel}"
+                             ajax="true"
+                             actionListener="#{directorBean.startCreateProvider}"
+                             process="@this"
+                             update="@this">
+            </h:commandButton>
+        </h:form>
+
+        <h:dataTable id="providers"
+                     var="provider"
+                     rowKey="#{provider.id}"
+                     value="#{directorBean.allProviders}"
+                     rowIndexVar="rowNum"
+                     emptyMessage="..."
+                     styleClass="table"
+                     selectionMode="single">
+            <h:column headerText="Название" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{provider.name}"/>
+            </h:column>
+            <h:column headerText="Страна" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{provider.country.name}"/>
+            </h:column>
+            <h:column headerText="Адрес" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{provider.address}"/>
+            </h:column>
+            <h:column headerText="Среднее время поставок (дней)" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{provider.deliveryDays}"/>
+            </h:column>
+            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                <h:form>
+                    <h:commandButton title="Редактировать поставщика"
+                                     value="Редактировать"
+                                     ajax="true"
+                                     actionListener="#{directorBean.startUpdateProvider(provider)}"
+                                     process="providers"
+                                     update="providers">
+                    </h:commandButton>
+                </h:form>
+            </h:column>
+            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                <h:form>
+                    <h:commandButton title="Удалить поставщика"
+                                     value="Удалить"
+                                     ajax="true"
+                                     actionListener="#{directorBean.deleteProvider(provider)}"
+                                     process="providers"
+                                     update="providers">
+                    </h:commandButton>
+                </h:form>
+            </h:column>
+        </h:dataTable>
+    </p:outputPanel>
+</ui:composition>

@@ -1,0 +1,44 @@
+.p-grid {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -0.5em;
+    margin-left: -0.5em;
+    margin-top: -0.5em;
+}
+
+.p-col {
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    flex-basis: 0;
+    padding: -0.5em;
+}
+
+.p-col-fixed {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    padding: .5em;
+}
+
+.text-vertical-align-center {
+    display: grid;
+}
+
+.divLebel {
+    width: 130px;
+    text-align: right;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.fullInput {
+    min-width: 100px;
+    width: 100%;
+}
+
+.table {
+    border: 2px solid black;
+}
