@@ -3,10 +3,7 @@ package by.k19.beans;
 
 import by.k19.dao.CountriesDao;
 import by.k19.dao.UserDao;
-import by.k19.model.Country;
-import by.k19.model.ProductType;
-import by.k19.model.User;
-import by.k19.model.UserType;
+import by.k19.model.*;
 import lombok.Data;
 
 import javax.annotation.ManagedBean;
@@ -30,8 +27,7 @@ public class UserBean implements Serializable {
     private String login;
     private String stringPassword;
 
-    public static List<Country> cashCountries;
-    public static List<ProductType> cashProductTypes;
+
 
 
     public void login() {
@@ -58,7 +54,7 @@ public class UserBean implements Serializable {
                             redirectUrl = "joke.xhtml";
                             break;
                     }
-                    initialCash();
+                    CashDataBean.initialCash();
                     context.getExternalContext().redirect(redirectUrl);
                 }
             }
@@ -81,13 +77,6 @@ public class UserBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Непредвиденная ошибка выхода из аккаунта", null));
         }
     }
-
-    private void initialCash() {
-        cashCountries = db.findAll(Country.class);
-        cashProductTypes = db.findAll(ProductType.class);
-    }
-
-
 
     private boolean validLoginForm() {
         return (stringPassword != null &&

@@ -30,7 +30,19 @@ public class ProvidersDao implements ObjectDao<ProductProvider> {
     public void save(ProductProvider provider) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
+        for (Product product : provider.getProductMap().keySet()) {
+            product.setProvider(null);
+        }
+        saveProducts(provider);
+        tx1.commit();
+        tx1 = session.beginTransaction();
         session.save(provider);
+        for (Product product : provider.getProductMap().keySet()) {
+            product.setProvider(provider);
+        }
+        tx1.commit();
+        tx1 = session.beginTransaction();
+        saveProducts(provider);
         tx1.commit();
         session.close();
     }
@@ -38,9 +50,19 @@ public class ProvidersDao implements ObjectDao<ProductProvider> {
     public void update(ProductProvider provider) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
+        saveProducts(provider);
         session.update(provider);
         tx1.commit();
         session.close();
+    }
+
+    private void saveProducts(ProductProvider provider) {
+        ProductDao prodDao = (ProductDao) DaoFactory.byClass(Product.class);
+        for (Product product : provider.getProductMap().keySet()) {
+            if (prodDao.findById(product.getId()) != null)
+                prodDao.update(product);
+            else prodDao.save(product);
+        }
     }
 
     public void delete(ProductProvider provider) {
@@ -55,7 +77,7 @@ public class ProvidersDao implements ObjectDao<ProductProvider> {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         List<ProductProvider> list = (List<ProductProvider>)session.createQuery("From ProductProvider").list();
         for (ProductProvider provider : list) {
-            int hash = provider.getProductList().hashCode();
+            int hash = provider.getProductMap().hashCode();
         }
         session.close();
         return list;

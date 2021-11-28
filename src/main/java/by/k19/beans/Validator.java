@@ -1,8 +1,6 @@
 package by.k19.beans;
 
-import by.k19.model.Product;
-import by.k19.model.ProductProvider;
-import by.k19.model.User;
+import by.k19.model.*;
 import lombok.Data;
 
 import javax.enterprise.context.SessionScoped;
@@ -22,11 +20,25 @@ public class Validator implements Serializable {
         else if (obj instanceof Product) {
             Product prod = (Product)obj;
             return validFields(prod.getName(), prod.getType(), prod.getPurchasePrice(), prod.getSellingPrice(),
-                    prod.getManufactureDate(), prod.getManufacturerCountry(), prod.getAmount());
+                    prod.getManufactureDate(), prod.getManufacturerCountry());
         }
         else if (obj instanceof ProductProvider) {
             ProductProvider provider = (ProductProvider)obj;
             return validFields(provider.getName(), provider.getAddress(), provider.getCountry(), provider.getDeliveryDays());
+        }
+        else if (obj instanceof Outlet) {
+            Outlet outlet = (Outlet)obj;
+            return validFields(outlet.getName(), outlet.getAddress(), outlet.getCountry());
+        }
+        else if (obj instanceof Purchase) {
+            Purchase purchase = (Purchase)obj;
+            if (purchase.getProducts() == null || purchase.getProducts().size() == 0)
+                return false;
+            for (Product product : purchase.getProducts().keySet()) {
+                if (!valid(product))
+                    return false;
+            }
+            return true;
         }
         return false;
     }

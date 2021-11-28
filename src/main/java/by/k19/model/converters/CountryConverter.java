@@ -1,5 +1,6 @@
 package by.k19.model.converters;
 
+import by.k19.beans.CashDataBean;
 import by.k19.beans.DatabaseBean;
 import by.k19.beans.UserBean;
 import by.k19.dao.CountriesDao;
@@ -35,7 +36,7 @@ public class CountryConverter implements Converter {
             return null;
         }
         try {
-            for (Country country : UserBean.cashCountries) {
+            for (Country country : CashDataBean.cashCountries) {
                 if (country.getName().equals(submittedValue))
                     return country;
             }

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -38,26 +39,25 @@ public class Product {
     @Column
     private Date shelfLife;
 
-    @Column
-    private Integer amount;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "provider_id")
     private ProductProvider provider;
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id && Objects.equals(name, product.name) && Objects.equals(type, product.type) && Objects.equals(purchasePrice, product.purchasePrice) && Objects.equals(sellingPrice, product.sellingPrice) && Objects.equals(manufactureDate, product.manufactureDate) && Objects.equals(manufacturerCountry, product.manufacturerCountry) && Objects.equals(shelfLife, product.shelfLife);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, type, purchasePrice, sellingPrice, manufactureDate, manufacturerCountry, shelfLife);
+    }
+
+    @Override
     public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", type=" + type +
-                ", purchasePrice=" + purchasePrice +
-                ", sellingPrice=" + sellingPrice +
-                ", manufactureDate=" + manufactureDate +
-                ", manufacturerCountry=" + manufacturerCountry +
-                ", shelfLife=" + shelfLife +
-                ", amount=" + amount +
-                ", provider=" + provider.getName() + ", " + provider.getCountry().getName() +
-                '}';
+        return name + " #" + id + " | Поставщик: " + provider.getName() + ", " + provider.getCountry().getName();
     }
 }

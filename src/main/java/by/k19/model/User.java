@@ -36,7 +36,22 @@ public class User {
     @Column
     private Date birthday;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "outlet")
+    private Outlet outlet;
+
     public String getFio() {
         return name + " " + surname;
+    }
+
+    public String getShortName() {
+        return surname + " " + name.substring(0, 0).toUpperCase() + ". ";
+    }
+
+    public String getOutletName() {
+        if (outlet == null) {
+            return "-/-/-";
+        }
+        return outlet.toString();
     }
 }

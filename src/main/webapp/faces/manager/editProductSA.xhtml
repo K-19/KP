@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:H="http://java.sun.com/jsf/html">
+    <p:outputPanel>
+
+
+        <h:selectOneMenu value="#{managerBean.currentProduct}" rendered="#{!managerBean.updatingProductSA}">
+            <f:selectItems value="#{managerBean.getAvailableProducts(true)}"/>
+        </h:selectOneMenu>
+
+        <h:outputText value="#{managerBean.currentProduct}" rendered="#{managerBean.updatingProductSA}"/>
+
+        <h:outputLabel value="Количество"/>
+
+        <h:inputText id="regAmount" styleClass="fullInput"
+                     value="#{managerBean.amountProduct}"/>
+
+        <h:messages style = "color:red;margin:8px;" />
+
+        <h:commandButton id="productRegistration" actionListener="#{managerBean.createProductSA}" value="Добавить продукт" rendered="#{managerBean.addingNewProductSA}" process="@this showCreateProductAssortmentPanelButton"/>
+        <h:commandButton id="productUpdating" actionListener="#{managerBean.updateProductSA}" value="Обновить продукт" rendered="#{managerBean.updatingProductSA}" process="@this showCreateProductAssortmentPanelButton"/>
+        <h:commandButton id="cancelProductRegistration" actionListener="#{managerBean.disableAddProductPanelSA}" value="Отмена" process="@this showCreateProductAssortmentPanelButton"/>
+
+
+    </p:outputPanel>
+</ui:composition>

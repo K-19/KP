@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:form>
+            <h:panelGrid id="createPurchasePanel" rendered="#{managerBean.enableCreatePurchasePanel}">
+                <ui:include src="createPurchaseTable.xhtml"/>
+            </h:panelGrid>
+
+            <h:commandButton title="Оформить покупку"
+                             id="showCreatePurchasePanelButton"
+                             value="Оформить покупку"
+                             rendered="#{!managerBean.enableCreatePurchasePanel}"
+                             ajax="true"
+                             actionListener="#{managerBean.showCreatePurchasePanel}"
+                             process="@this createPurchasePanel"
+                             update="@this createPurchasePanel">
+            </h:commandButton>
+            <h1>Покупки</h1>
+            <h:dataTable id="purchasesTable"
+                         var="purchase"
+                         rowKey="#{purchase.id}"
+                         value="#{managerBean.purchasesHistory}"
+                         rowIndexVar="rowNum"
+                         emptyMessage="..."
+                         styleClass="table"
+                         selectionMode="single">
+                <h:column headerText="№" width="20">
+                    <h:outputText value="#{rowNum + 1}"/>
+                </h:column>
+                <h:column headerText="Время" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{purchase.timeString}"/>
+                </h:column>
+                <h:column headerText="Покупки" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{purchase.productsString}"/>
+                </h:column>
+                <h:column headerText="Оформивший" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{purchase.user.shortName}"/>
+                </h:column>
+
+                <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                    <h:commandButton title="Редактировать продукт"
+                                     value="Редактировать">
+                    </h:commandButton>
+                </h:column>
+                <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                    <h:commandButton title="Удалить продукт"
+                                     value="Удалить">
+                    </h:commandButton>
+                </h:column>
+
+            </h:dataTable>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

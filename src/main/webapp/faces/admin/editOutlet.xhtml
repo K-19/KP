@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+
+        <h:form id="updatingOutletForm">
+            <h:outputLabel value="Название"/>
+
+            <h:inputText id="outletName" styleClass="fullInput"
+                         value="#{adminBean.manipulatedOutlet.name}"/>
+
+            <h:outputLabel value="Адрес"/>
+
+            <h:inputText id="outletAddress" styleClass="fullInput"
+                         value="#{adminBean.manipulatedOutlet.address}"/>
+
+            <h:outputLabel value="Страна"/>
+
+            <h:selectOneMenu value="#{adminBean.manipulatedOutlet.country}">
+                <f:selectItems value="#{databaseBean.countryTypes}"/>
+            </h:selectOneMenu>
+
+            <h:commandButton actionListener="#{adminBean.createOutlet}" value="Зарегистрировать торговую точку" rendered="#{adminBean.creatingNewOutlet}" process="@this showCreateOutletPanelButton"/>
+            <h:commandButton actionListener="#{adminBean.updateOutlet}" value="Обновить торговую точку" rendered="#{adminBean.updatingOutlet}" process="@this"/>
+            <h:commandButton actionListener="#{adminBean.closeEditOutletPanel}" value="Отмена торговой точки" process="@this"/>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

@@ -13,7 +13,7 @@
          <h:outputLabel value="Тип продукта"/>
 
          <h:selectOneMenu value="#{directorBean.currentProduct.type}">
-            <f:selectItems value="#{directorBean.productTypes}"/>
+            <f:selectItems value="#{databaseBean.productTypes}"/>
          </h:selectOneMenu>
 
          <h:outputLabel value="Цена закупки 1 шт"/>
@@ -36,7 +36,7 @@
          <h:outputLabel value="Страна изготовитель"/>
 
          <h:selectOneMenu value="#{directorBean.currentProduct.manufacturerCountry}">
-            <f:selectItems value="#{directorBean.countryTypes}"/>
+            <f:selectItems value="#{databaseBean.countryTypes}"/>
          </h:selectOneMenu>
 
          <h:outputLabel value="Срок годности"/>
@@ -49,7 +49,7 @@
          <h:outputLabel value="Количество (в месяц)"/>
 
          <h:inputText id="regAmount" styleClass="fullInput"
-                      value="#{directorBean.currentProduct.amount}"/>
+                      value="#{directorBean.amountProduct}"/>
 
          <h:commandButton id="productRegistration" actionListener="#{directorBean.createProduct}" value="Добавить продукт" rendered="#{directorBean.addingNewProduct}" process="@this showCreateProductPanelButton"/>
          <h:commandButton id="productUpdating" actionListener="#{directorBean.updateProduct}" value="Обновить продукт" rendered="#{directorBean.updatingProduct}" process="@this showCreateProductPanelButton"/>

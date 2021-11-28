@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:form>
+            <h1>Запросы на склад</h1>
+            <h:dataTable id="requestsTable"
+                         var="prodRequest"
+                         rowKey="#{prodRequest.id}"
+                         value="#{managerBean.requestList}"
+                         rowIndexVar="rowNum"
+                         emptyMessage="..."
+                         styleClass="table"
+                         selectionMode="single">
+                <h:column headerText="№" width="20">
+                    <h:outputText value="#{rowNum + 1}"/>
+                </h:column>
+                <h:column headerText="Отправлен" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{prodRequest.startTimeString}"/>
+                </h:column>
+                <h:column headerText="Исполнен" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{prodRequest.acceptTimeString}"/>
+                </h:column>
+                <h:column headerText="Сотрудник, сделавший запрос" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{prodRequest.user.shortName}"/>
+                </h:column>
+                <h:column headerText="Статус" style="width:3% ;border-color: #82bbd8">
+                    <h:outputText style="color: green" value="Удовлетворен" rendered="#{prodRequest.acceptTime ne null}"/>
+                    <h:commandButton title="Зафиксировать факт принятия товара на торговую точку"
+                                     value="Удовлетворить запрос"
+                                     ajax="true"
+                                     actionListener="#{managerBean.acceptRequest(prodRequest)}"
+                                     rendered="#{prodRequest.acceptTime eq null}"
+                                     process="requestsTable"
+                                     update="requestsTable">
+                    </h:commandButton>
+                </h:column>
+                <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                    <h:commandButton title="Удалить запрос"
+                                     value="Удалить запрос"
+                                     ajax="true"
+                                     actionListener="#{managerBean.deleteRequest(prodRequest)}"
+                                     process="@this requestsTable"
+                                     update="@this requestsTable">
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

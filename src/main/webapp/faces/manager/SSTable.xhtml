@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:form>
+            <h:panelGrid id="productPanelSS" rendered="#{managerBean.enableEditProductPanelSS}">
+                <ui:include src="editProductSS.xhtml"/>
+            </h:panelGrid>
+
+            <h:commandButton title="Добавить товар на склад"
+                             id="showCreateProductStoragePanelButton"
+                             value="Добавить товар"
+                             rendered="#{!managerBean.enableEditProductPanelSS and managerBean.getAvailableProducts(false).size() ne 0}}"
+                             ajax="true"
+                             actionListener="#{managerBean.enableAddProductPanelSS}"
+                             process="@this"
+                             update="@this">
+            </h:commandButton>
+            <h1>Стандартный склад</h1>
+            <h:dataTable id="SSTable"
+                         var="product"
+                         rowKey="#{product.id}"
+                         value="#{managerBean.SSproducts}"
+                         rowIndexVar="rowNum"
+                         emptyMessage="..."
+                         styleClass="table"
+                         selectionMode="single">
+                <h:column headerText="№" width="20">
+                    <h:outputText value="#{rowNum + 1}"/>
+                </h:column>
+                <h:column headerText="Название" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{product.name}"/>
+                </h:column>
+                <h:column headerText="Тип продукта" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{product.type.name}"/>
+                </h:column>
+                <h:column headerText="Цена закупки" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{product.purchasePrice}"/>
+                </h:column>
+                <h:column headerText="Цена продажи" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{product.sellingPrice}"/>
+                </h:column>
+                <h:column headerText="Дата изготовления" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{product.manufactureDate}"/>
+                </h:column>
+                <h:column headerText="Страна-изготовитель" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{product.manufacturerCountry.name}"/>
+                </h:column>
+                <h:column headerText="Срок годности" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{product.shelfLife}"/>
+                </h:column>
+                <h:column headerText="Количество" style="width:400px;border-color: #82bbd8">
+                    <h:outputText value="#{managerBean.SS.get(product)}"/>
+                </h:column>
+                <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                    <h:commandButton title="Редактировать продукт"
+                                     value="Редактировать"
+                                     ajax="true"
+                                     actionListener="#{managerBean.startUpdateProductSS(product, managerBean.SS.get(product))}"
+                                     process="SSTable"
+                                     update="SSTable">
+                    </h:commandButton>
+                </h:column>
+                <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                    <h:commandButton title="Удалить продукт"
+                                     value="Удалить"
+                                     ajax="true"
+                                     actionListener="#{managerBean.deleteProductSS(product)}"
+                                     process="@this SSTable"
+                                     update="@this SSTable">
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
@@ -29,8 +31,21 @@ public class ProductProvider {
     @Column
     private Integer deliveryDays;
 
-    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Product> productList;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Map<Product, Integer> productMap;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductProvider provider = (ProductProvider) o;
+        return id == provider.id && Objects.equals(name, provider.name) && Objects.equals(address, provider.address) && Objects.equals(country, provider.country) && Objects.equals(deliveryDays, provider.deliveryDays) && Objects.equals(productMap, provider.productMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, address, country, deliveryDays, productMap);
+    }
 
     @Override
     public String toString() {
@@ -40,7 +55,7 @@ public class ProductProvider {
                 ", address='" + address + '\'' +
                 ", country=" + country +
                 ", deliveryDays=" + deliveryDays +
-                ", productList=" + productList.stream().map(Product::getName).collect(Collectors.joining(", ")) +
+                ", productMap=" + productMap.keySet().stream().map(product -> product.getName() + " : " + productMap.get(product).toString()).collect(Collectors.joining("|")) +
                 '}';
     }
 }

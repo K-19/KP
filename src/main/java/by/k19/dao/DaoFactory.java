@@ -18,6 +18,12 @@ public class DaoFactory {
             return CountriesDao.getInstance();
         } else if (clazz.equals(ProductType.class)) {
             return ProductTypesDao.getInstance();
+        } else if (clazz.equals(Outlet.class)) {
+            return OutletsDao.getInstance();
+        } else if (clazz.equals(ProductRequest.class)) {
+            return ProductRequestDao.getInstance();
+        } else if (clazz.equals(Purchase.class)) {
+            return PurchasesDao.getInstance();
         }
         else throw new IllegalArgumentException();
     }
@@ -33,6 +39,12 @@ public class DaoFactory {
             return CountriesDao.getInstance();
         } else if (obj instanceof ProductType) {
             return ProductTypesDao.getInstance();
+        } else if (obj instanceof Outlet) {
+            return OutletsDao.getInstance();
+        } else if (obj instanceof ProductRequest) {
+            return ProductRequestDao.getInstance();
+        } else if (obj instanceof Purchase) {
+            return PurchasesDao.getInstance();
         }
         else throw new IllegalArgumentException();
     }

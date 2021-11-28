@@ -2,6 +2,9 @@ package by.k19.beans;
 
 import by.k19.dao.DaoFactory;
 import by.k19.dao.ObjectDao;
+import by.k19.model.Country;
+import by.k19.model.ProductType;
+import by.k19.model.UserType;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
@@ -39,5 +42,17 @@ public class DatabaseBean implements Serializable {
 
     public <T> ObjectDao<T> getDao(Class<T> clazz) {
         return DaoFactory.byClass(clazz);
+    }
+
+    public List<Country> getCountryTypes() {
+        return DaoFactory.byClass(Country.class).findAll();
+    }
+
+    public List<ProductType> getProductTypes() {
+        return DaoFactory.byClass(ProductType.class).findAll();
+    }
+
+    public UserType[] getUserTypes() {
+        return UserType.values();
     }
 }

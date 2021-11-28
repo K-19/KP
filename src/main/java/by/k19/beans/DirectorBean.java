@@ -9,7 +9,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Named
@@ -29,14 +31,7 @@ public class DirectorBean implements Serializable {
     private boolean updatingProduct;
     private ProductProvider currentProvider = new ProductProvider();
     private Product currentProduct = new Product();
-
-    public List<Country> getCountryTypes() {
-        return DaoFactory.byClass(Country.class).findAll();
-    }
-
-    public List<ProductType> getProductTypes() {
-        return DaoFactory.byClass(ProductType.class).findAll();
-    }
+    private Integer amountProduct;
 
     public List<ProductProvider> getAllProviders() {
         return db.findAll(ProductProvider.class);
@@ -82,15 +77,15 @@ public class DirectorBean implements Serializable {
     }
 
     public void createProduct() {
-        if (currentProvider.getProductList() == null)
-            currentProvider.setProductList(new ArrayList<>());
+        if (currentProvider.getProductMap() == null)
+            currentProvider.setProductMap(new HashMap<>());
         currentProduct.setProvider(currentProvider);
-        if (updatingProvider) {
-            db.save(currentProduct);
-            currentProduct = db.findById(Product.class, currentProduct.getId());
-        }
+//        if (updatingProvider) {
+//            db.save(currentProduct);
+//            currentProduct = db.findById(Product.class, currentProduct.getId());
+//        }
         if (validator.valid(currentProduct)) {
-            currentProvider.getProductList().add(currentProduct);
+            currentProvider.getProductMap().put(currentProduct, amountProduct);
             disableAddProductPanel();
         }
     }
@@ -98,13 +93,13 @@ public class DirectorBean implements Serializable {
     public void updateProduct() {
         if (validator.valid(currentProduct)) {
             if (creatingProvider) {
-                List<Product> newList = new ArrayList<>();
-                for (Product product : currentProvider.getProductList()) {
+                Map<Product, Integer> newMap = new HashMap<>();
+                for (Product product : currentProvider.getProductMap().keySet()) {
                     if (product.getId() == currentProduct.getId())
-                        newList.add(currentProduct);
-                    else newList.add(product);
+                        newMap.put(currentProduct, amountProduct);
+                    else newMap.put(product, currentProvider.getProductMap().get(product));
                 }
-                currentProvider.setProductList(newList);
+                currentProvider.setProductMap(newMap);
             }
             else
                 db.update(currentProduct);
@@ -114,8 +109,9 @@ public class DirectorBean implements Serializable {
 
 
 
-    public void startUpdateProduct(Product product) {
+    public void startUpdateProduct(Product product, Integer amount) {
         currentProduct = product;
+        amountProduct = amount;
         enableEditProductPanel = true;
         updatingProduct = true;
     }
@@ -128,7 +124,7 @@ public class DirectorBean implements Serializable {
         if (updatingProvider) {
             db.delete(product);
         }
-        currentProvider.getProductList().remove(product);
+        currentProvider.getProductMap().remove(product);
     }
 
     public void disableCreatePanel() {
@@ -146,6 +142,7 @@ public class DirectorBean implements Serializable {
 
     public void disableAddProductPanel() {
         currentProduct = null;
+        amountProduct = 0;
         enableEditProductPanel = false;
         addingNewProduct = false;
         updatingProduct = false;
@@ -159,5 +156,11 @@ public class DirectorBean implements Serializable {
         updatingProvider = false;
         addingNewProduct = false;
         updatingProduct = false;
+    }
+
+    public List<Product> getCurrentProviderProducts() {
+        if (currentProvider != null && currentProvider.getProductMap() != null)
+            return new ArrayList<>(currentProvider.getProductMap().keySet());
+        else return new ArrayList<>();
     }
 }

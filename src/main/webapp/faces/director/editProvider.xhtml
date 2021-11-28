@@ -12,7 +12,7 @@
             <h:outputLabel value="Страна"/>
 
             <h:selectOneMenu value="#{directorBean.currentProvider.country}">
-                <f:selectItems value="#{directorBean.countryTypes}"/>
+                <f:selectItems value="#{databaseBean.countryTypes}"/>
             </h:selectOneMenu>
 
             <h:outputLabel value="Адрес"/>
@@ -26,9 +26,9 @@
                          value="#{directorBean.currentProvider.deliveryDays}"/>
             <h:messages style = "color:red;margin:8px;" />
 
-            <h:commandButton id="providerRegistration" actionListener="#{directorBean.createProvider()}" value="Зарегистрировать поставщика" rendered="#{directorBean.creatingProvider}" process="@this showCreatePanelButton"/>
+            <h:commandButton id="providerRegistration" actionListener="#{directorBean.createProvider()}" value="Зарегистрировать поставщика" rendered="#{directorBean.creatingProvider}" process="@this showCreateProviderPanelButton"/>
             <h:commandButton id="providerUpdate" actionListener="#{directorBean.updateProvider()}" value="Обновить поставщика" rendered="#{directorBean.updatingProvider}"  process="@this"/>
-            <h:commandButton id="cancelRegistration" actionListener="#{directorBean.disableCreatePanel}" value="Отмена" process="@this showCreatePanelButton"/>
+            <h:commandButton id="cancelRegistration" actionListener="#{directorBean.disableCreatePanel}" value="Отмена" process="@this showCreateProviderPanelButton"/>
 
             <ui:include src="productsTable.xhtml"/>
 

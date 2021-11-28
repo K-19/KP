@@ -7,6 +7,80 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view>
     <ui:include src="../topMenu.xhtml"/>
-    <h:outputLabel value="Hello, world"/>
+
+    <h:form id="buttonsPanel">
+        <h:commandButton title="Открыть панель редактирования стандартного наполнения ассортимента"
+                         value="Стандартный ассортимент"
+                         rendered="#{!managerBean.enablePanelSA}"
+                         ajax="true"
+                         actionListener="#{managerBean.showPanelSA}"
+                         process="@this"
+                         update="@this">
+        </h:commandButton>
+        <h:commandButton title="Открыть панель редактирования стандартного наполнения склада"
+                         value="Стандартный запас на складе"
+                         rendered="#{!managerBean.enablePanelSS}"
+                         ajax="true"
+                         actionListener="#{managerBean.showPanelSS}"
+                         process="@this"
+                         update="@this">
+        </h:commandButton>
+        <h:commandButton title="Открыть панель текущего ассортимента"
+                         value="Текущий ассортимент"
+                         rendered="#{!managerBean.enablePanelCA}"
+                         ajax="true"
+                         actionListener="#{managerBean.showPanelCA}"
+                         process="@this"
+                         update="@this">
+        </h:commandButton>
+        <h:commandButton title="Открыть панель текущего склада"
+                         value="Текущий запас на складе"
+                         rendered="#{!managerBean.enablePanelCS}"
+                         ajax="true"
+                         actionListener="#{managerBean.showPanelCS}"
+                         process="@this"
+                         update="@this">
+        </h:commandButton>
+        <h:commandButton title="Открыть панель запросов на головной склад"
+                         value="Запросы на склад"
+                         rendered="#{!managerBean.enablePanelRequests}"
+                         ajax="true"
+                         actionListener="#{managerBean.showPanelRequests}"
+                         process="@this"
+                         update="@this">
+        </h:commandButton>
+        <h:commandButton title="Открыть панель покупок"
+                         value="Покупки"
+                         rendered="#{!managerBean.enablePanelPurchases}"
+                         ajax="true"
+                         actionListener="#{managerBean.showPanelPurchase}"
+                         process="@this"
+                         update="@this">
+        </h:commandButton>
+    </h:form>
+
+    <h:panelGroup id="managerPanel">
+        <h:panelGrid id="SAPanel" rendered="#{managerBean.enablePanelSA}">
+            <ui:include src="SATable.xhtml"/>
+        </h:panelGrid>
+        <h:panelGrid id="SSPanel" rendered="#{managerBean.enablePanelSS}">
+            <ui:include src="SSTable.xhtml"/>
+        </h:panelGrid>
+        <h:panelGrid id="CAPanel" rendered="#{managerBean.enablePanelCA}">
+            <ui:include src="CATable.xhtml"/>
+        </h:panelGrid>
+        <h:panelGrid id="CSPanel" rendered="#{managerBean.enablePanelCS}">
+            <ui:include src="CSTable.xhtml"/>
+        </h:panelGrid>
+        <h:panelGrid id="newQuery" rendered="#{managerBean.enableQueryToMainStorage}">
+            <ui:include src="newQuery.xhtml"/>
+        </h:panelGrid>
+        <h:panelGrid id="requestsPanel" rendered="#{managerBean.enablePanelRequests}">
+            <ui:include src="requestsTable.xhtml"/>
+        </h:panelGrid>
+        <h:panelGrid id="purchasesPanel" rendered="#{managerBean.enablePanelPurchases}">
+            <ui:include src="purchasesTable.xhtml"/>
+        </h:panelGrid>
+    </h:panelGroup>
 </f:view>
 </html>

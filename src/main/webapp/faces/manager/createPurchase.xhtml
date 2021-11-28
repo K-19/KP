@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:H="http://java.sun.com/jsf/html">
+    <p:outputPanel>
+
+
+        <h:selectOneMenu value="#{managerBean.currentProduct}" rendered="#{!managerBean.updatingProductPurchase}">
+            <f:selectItems value="#{managerBean.getAvailableProductsCACS(true)}"/>
+        </h:selectOneMenu>
+
+        <h:outputText value="#{managerBean.currentProduct}" rendered="#{managerBean.updatingProductPurchase}"/>
+
+        <h:outputLabel value="Количество"/>
+
+        <h:inputText id="regAmount" styleClass="fullInput"
+                     value="#{managerBean.amountProduct}"/>
+
+        <h:messages style = "color:red;margin:8px;" />
+
+        <h:commandButton id="productRegistration" actionListener="#{managerBean.createProductPurchase}" value="Добавить продукт" rendered="#{managerBean.addingNewProductToPurchase}" process="@this showCreatePurchasePanelButton"/>
+        <h:commandButton id="productUpdating" actionListener="#{managerBean.updateProductPurchase}" value="Обновить продукт" rendered="#{managerBean.updatingProductPurchase}" process="@this showCreatePurchasePanelButton"/>
+        <h:commandButton id="cancelProductRegistration" actionListener="#{managerBean.disableAddProductPanelPurchase}" value="Отмена" process="@this showCreatePurchasePanelButton"/>
+
+
+    </p:outputPanel>
+</ui:composition>

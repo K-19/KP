@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+
+        <h:form id="updatingUserForm">
+            <h:outputLabel value="Логин"/>
+
+            <h:inputText id="regLogin" styleClass="fullInput"
+                         value="#{adminBean.manipulatedUser.login}"/>
+
+            <h:outputLabel value="Пароль"/>
+
+            <h:inputText id="regPassword" styleClass="fullInput"
+                         value="#{adminBean.stringCreatedUserPassword}"/>
+
+            <h:outputLabel value="Имя"/>
+
+            <h:inputText id="regName" styleClass="fullInput"
+                         value="#{adminBean.manipulatedUser.name}"/>
+
+            <h:outputLabel value="Фамилия"/>
+
+            <h:inputText id="regSurname" styleClass="fullInput"
+                         value="#{adminBean.manipulatedUser.surname}"/>
+
+            <h:outputLabel id="regTypeUser" value="Тип пользователя"/>
+            <h:selectOneMenu value="#{adminBean.manipulatedUser.type}">
+                <f:selectItems value="#{databaseBean.userTypes}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel id="regUserOutlet" value="Связанный торговый объект"/>
+            <h:selectOneMenu value="#{adminBean.manipulatedUser.outlet}">
+                <f:selectItems value="#{adminBean.allOutlets}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="Дата рождения (дд-ММ-гггг)"/>
+
+            <h:inputText id="regBirthday" styleClass="fullInput"
+                         value="#{adminBean.manipulatedUser.birthday}">
+                <f:convertDateTime pattern="dd-MM-yyyy"/>
+            </h:inputText>
+
+            <h:messages style = "color:red;margin:8px;" />
+
+            <h:commandButton id="userRegistration" actionListener="#{adminBean.createUser}" value="Зарегистрировать пользователя" rendered="#{adminBean.creatingNewUser}" process="@this showCreateUserPanelButton outlets"/>
+            <h:commandButton id="userUpdating" actionListener="#{adminBean.updateUser}" value="Обновить пользователя" rendered="#{adminBean.updatingUser}" process="@this outlets"/>
+            <h:commandButton id="cancelUpdating" actionListener="#{adminBean.closeEditUserPanel}" value="Отмена" process="@this"/>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

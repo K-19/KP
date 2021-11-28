@@ -7,14 +7,20 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view>
     <ui:include src="../topMenu.xhtml"/>
+
     <h:panelGroup id="adminPanel">
-        <h:panelGrid id="createPanel" rendered="#{adminBean.creatingNewUser}">
-            <ui:include src="createUser.xhtml"/>
-        </h:panelGrid>
-        <h:panelGrid id="updatePanel" rendered="#{adminBean.updatingUser}">
-            <ui:include src="updateUser.xhtml"/>
+        <h:panelGrid rendered="#{adminBean.enableEditUserPanel}">
+            <ui:include src="editUser.xhtml"/>
         </h:panelGrid>
         <ui:include src="usersTable.xhtml"/>
     </h:panelGroup>
+
+    <h:panelGroup id="outletsPanel">
+        <h:panelGrid rendered="#{adminBean.enableEditOutletPanel}">
+            <ui:include src="editOutlet.xhtml"/>
+        </h:panelGrid>
+        <ui:include src="outletsTable.xhtml"/>
+    </h:panelGroup>
+
 </f:view>
 </html>

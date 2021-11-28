@@ -4,12 +4,12 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html">
     <p:outputPanel>
 
-        <h:form id="showCreatePanelButton">
+        <h:form id="showCreateUserPanelButton">
             <h:commandButton title="Создать нового пользователя"
                              value="Новый пользователь"
                              rendered="#{!adminBean.creatingNewUser}"
                              ajax="true"
-                             actionListener="#{adminBean.enableCreatePanel}"
+                             actionListener="#{adminBean.enableCreateUserPanel}"
                              process="adminPanel @this"
                              update="adminPanel @this">
             </h:commandButton>
@@ -33,6 +33,9 @@
             </h:column>
             <h:column headerText="Дата рождения" style="width:400px;border-color: #82bbd8">
                 <h:outputText value="#{user.birthday}"/>
+            </h:column>
+            <h:column headerText="Торговая точка" style="width:400px;border-color: #82bbd8">
+                <h:outputText value="#{user.outletName}"/>
             </h:column>
             <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
                 <h:form>
