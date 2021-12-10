@@ -3,58 +3,82 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
    <p:outputPanel>
+       <h:form>
+           <div class="inputElement">
+                 <h:outputLabel value="Название"/>
+                 <h:inputText id="regProductName" styleClass="inputField"
+                              value="#{directorBean.currentProduct.name}"/>
+           </div>
 
+           <div class="inputElement">
+                 <h:outputLabel value="Тип продукта"/>
+                 <h:selectOneMenu value="#{directorBean.currentProduct.type}" styleClass="inputField">
+                    <f:selectItems value="#{databaseBean.productTypes}"/>
+                 </h:selectOneMenu>
+           </div>
 
-         <h:outputLabel value="Название"/>
+           <div class="inputElement">
+                 <h:outputLabel value="Цена закупки 1 шт"/>
+                 <h:inputText id="regPurchasePrice" styleClass="inputField"
+                              value="#{directorBean.currentProduct.purchasePrice}"/>
+           </div>
 
-         <h:inputText id="regProductName" styleClass="fullInput"
-                      value="#{directorBean.currentProduct.name}"/>
+           <div class="inputElement">
+                 <h:outputLabel value="Цена продажи"/>
+                 <h:inputText id="regSellingPrice" styleClass="inputField"
+                              value="#{directorBean.currentProduct.sellingPrice}"/>
+           </div>
 
-         <h:outputLabel value="Тип продукта"/>
+           <div class="inputElement">
+                 <h:outputLabel value="Дата изготовления (дд-ММ-гггг)"/>
+                 <h:inputText id="regManufDate" styleClass="inputField"
+                              value="#{directorBean.currentProduct.manufactureDate}">
+                    <f:convertDateTime pattern="dd-MM-yyyy"/>
+                 </h:inputText>
+           </div>
 
-         <h:selectOneMenu value="#{directorBean.currentProduct.type}">
-            <f:selectItems value="#{databaseBean.productTypes}"/>
-         </h:selectOneMenu>
+           <div class="inputElement">
+                 <h:outputLabel value="Страна изготовитель"/>
+                 <h:selectOneMenu value="#{directorBean.currentProduct.manufacturerCountry}" styleClass="inputField">
+                    <f:selectItems value="#{databaseBean.countryTypes}"/>
+                 </h:selectOneMenu>
+           </div>
 
-         <h:outputLabel value="Цена закупки 1 шт"/>
+           <div class="inputElement">
+                 <h:outputLabel value="Срок годности"/>
+                 <h:inputText id="regShelfLife" styleClass="inputField"
+                              value="#{directorBean.currentProduct.shelfLife}">
+                    <f:convertDateTime pattern="dd-MM-yyyy"/>
+                 </h:inputText>
+           </div>
 
-         <h:inputText id="regPurchasePrice" styleClass="fullInput"
-                      value="#{directorBean.currentProduct.purchasePrice}"/>
+           <div class="inputElement">
+                 <h:outputLabel value="Количество (в месяц)"/>
+                 <h:inputText id="regAmount" styleClass="inputField"
+                              value="#{directorBean.amountProduct}"/>
+           </div>
 
-         <h:outputLabel value="Цена продажи"/>
+           <div class="buttonPanel">
+                 <h:commandButton styleClass="buttonPanelElement"
+                                  id="productRegistration"
+                                  actionListener="#{directorBean.createProduct}"
+                                  value="Добавить продукт"
+                                  rendered="#{directorBean.addingNewProduct}"
+                                  process="@this showCreateProductPanelButton"/>
+                 <h:commandButton styleClass="buttonPanelElement"
+                                  id="productUpdating"
+                                  actionListener="#{directorBean.updateProduct}"
+                                  value="Обновить продукт"
+                                  rendered="#{directorBean.updatingProduct}"
+                                  process="@this showCreateProductPanelButton"/>
+                 <h:commandButton styleClass="buttonPanelElement"
+                                  id="cancelProductRegistration"
+                                  actionListener="#{directorBean.disableAddProductPanel}"
+                                  value="Отмена"
+                                  process="@this showCreateProductPanelButton"/>
+           </div>
+           <h:messages styleClass="errorMessage"/>
 
-         <h:inputText id="regSellingPrice" styleClass="fullInput"
-                      value="#{directorBean.currentProduct.sellingPrice}"/>
-
-         <h:outputLabel value="Дата изготовления (дд-ММ-гггг)"/>
-
-         <h:inputText id="regManufDate" styleClass="fullInput"
-                      value="#{directorBean.currentProduct.manufactureDate}">
-            <f:convertDateTime pattern="dd-MM-yyyy"/>
-         </h:inputText>
-
-         <h:outputLabel value="Страна изготовитель"/>
-
-         <h:selectOneMenu value="#{directorBean.currentProduct.manufacturerCountry}">
-            <f:selectItems value="#{databaseBean.countryTypes}"/>
-         </h:selectOneMenu>
-
-         <h:outputLabel value="Срок годности"/>
-
-         <h:inputText id="regShelfLife" styleClass="fullInput"
-                      value="#{directorBean.currentProduct.shelfLife}">
-            <f:convertDateTime pattern="dd-MM-yyyy"/>
-         </h:inputText>
-
-         <h:outputLabel value="Количество (в месяц)"/>
-
-         <h:inputText id="regAmount" styleClass="fullInput"
-                      value="#{directorBean.amountProduct}"/>
-
-         <h:commandButton id="productRegistration" actionListener="#{directorBean.createProduct}" value="Добавить продукт" rendered="#{directorBean.addingNewProduct}" process="@this showCreateProductPanelButton"/>
-         <h:commandButton id="productUpdating" actionListener="#{directorBean.updateProduct}" value="Обновить продукт" rendered="#{directorBean.updatingProduct}" process="@this showCreateProductPanelButton"/>
-         <h:commandButton id="cancelProductRegistration" actionListener="#{directorBean.disableAddProductPanel}" value="Отмена" process="@this showCreateProductPanelButton"/>
-
-
+       </h:form>
    </p:outputPanel>
 </ui:composition>

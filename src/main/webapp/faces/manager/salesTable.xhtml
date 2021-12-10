@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:form>
+            <h:panelGrid id="createSalePanel" styleClass="tablePage" rendered="#{managerBean.creatingSale}">
+                <ui:include src="editSale.xhtml"/>
+            </h:panelGrid>
+
+            <h:commandButton title="Создать новую скидку на товар"
+                             id="showCreateSalePanelButton"
+                             value="Создать скидку"
+                             rendered="#{!managerBean.creatingSale}"
+                             ajax="true"
+                             actionListener="#{managerBean.enableAddSalePanel}"
+                             process="@this createSalePanel"
+                             update="@this createSalePanel">
+            </h:commandButton>
+            <h1>Скидки</h1>
+            <h:dataTable id="salesTable"
+                         var="sale"
+                         rowKey="#{sale.id}"
+                         value="#{managerBean.sales}"
+                         rowIndexVar="rowNum"
+                         emptyMessage="..."
+                         styleClass="infoTable"
+                         selectionMode="single">
+                <h:column>
+                    <f:facet name="header">№</f:facet>
+                    <h:outputText value="#{rowNum + 1}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Продукт</f:facet>
+                    <h:outputText value="#{sale.product}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Процент</f:facet>
+                    <h:outputText value="#{sale.percentString}"/>
+                </h:column>
+                <h:column>
+                    <h:commandButton title="Удалить скидку"
+                                     value="Удалить"
+                                     ajax="true"
+                                     actionListener="#{managerBean.deleteSale(sale)}"
+                                     process="@this salesTable"
+                                     update="@this salesTable">
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

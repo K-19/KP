@@ -11,26 +11,19 @@
 </h:head>
 <h:body>
 
-    <h:form id="loginForm">
-        <div class="p-grid">
-            <div class="p-col-fixed text-vertical-align-center divLebel" style="width: 10%">
-                <h:outputLabel value="Логин"/>
+    <div class="center-block">
+        <h:form id="loginForm">
+            <div>
+                    <h:outputLabel value="Логин" styleClass="labelStyle"/>
+                    <h:inputText id="login" styleClass="fullInput"
+                                     value="#{userBean.login}"/>
             </div>
-            <div class="p-col text-vertical-align-center">
-                <h:inputText id="login" styleClass="fullInput"
-                                 value="#{userBean.login}"/>
-            </div>
-        </div>
-        <div class="p-grid nested-grid">
-            <div class="p-col-fixed text-vertical-align-center divLebel" style="width: 10%">
-                <h:outputLabel value="Пароль"/>
-            </div>
-            <div class="p-col text-vertical-align-center">
-                <h:inputSecret id="password" styleClass="fullInput"
-                                 value="#{userBean.stringPassword}"/>
-            </div>
-        </div>
-        <h:commandButton id="userLogin" actionListener="#{userBean.login()}" value="Войти" process="@this"/>
-    </h:form>
+                    <h:outputLabel value="Пароль" styleClass="labelStyle"/>
+                    <h:inputSecret id="password" styleClass="fullInput"
+                                     value="#{userBean.stringPassword}"/>
+            <br/>
+            <h:commandButton styleClass="submitButton" id="userLogin" actionListener="#{userBean.login()}" value="Войти" process="@this"/>
+        </h:form>
+    </div>
 </h:body>
 </html>

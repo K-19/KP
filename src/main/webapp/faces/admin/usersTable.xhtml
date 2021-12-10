@@ -1,19 +1,22 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
     <p:outputPanel>
 
-        <h:form id="showCreateUserPanelButton">
-            <h:commandButton title="Создать нового пользователя"
-                             value="Новый пользователь"
-                             rendered="#{!adminBean.creatingNewUser}"
-                             ajax="true"
-                             actionListener="#{adminBean.enableCreateUserPanel}"
-                             process="adminPanel @this"
-                             update="adminPanel @this">
-            </h:commandButton>
-        </h:form>
+        <div class="createButton">
+            <h:form id="showCreateUserPanelButton">
+                <h:commandButton title="Создать нового пользователя"
+                                 value="Новый пользователь"
+                                 rendered="#{!adminBean.creatingNewUser}"
+                                 ajax="true"
+                                 actionListener="#{adminBean.enableCreateUserPanel}"
+                                 process="adminPanel @this"
+                                 update="adminPanel @this">
+                </h:commandButton>
+            </h:form>
+        </div>
 
         <h:dataTable id="users"
                      var="user"
@@ -21,23 +24,29 @@
                      value="#{adminBean.allUsers}"
                      rowIndexVar="rowNum"
                      emptyMessage="..."
+                     styleClass="infoTable"
                      selectionMode="single">
-            <h:column headerText="№" width="20">
+            <h:column>
+                <f:facet name="header">№</f:facet>
                 <h:outputText value="#{rowNum + 1}"/>
             </h:column>
-            <h:column headerText="ФИО" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">ФИО</f:facet>
                 <h:outputText value="#{user.fio}"/>
             </h:column>
-            <h:column headerText="Тип" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Тип</f:facet>
                 <h:outputText value="#{user.type.name}"/>
             </h:column>
-            <h:column headerText="Дата рождения" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Дата рождения</f:facet>
                 <h:outputText value="#{user.birthday}"/>
             </h:column>
-            <h:column headerText="Торговая точка" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Торговая точка</f:facet>
                 <h:outputText value="#{user.outletName}"/>
             </h:column>
-            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+            <h:column style="width:3% ;border-color: #82bbd8">
                 <h:form>
                     <h:commandButton title="Редактировать пользователя"
                                      value="Редактировать"
@@ -48,7 +57,7 @@
                     </h:commandButton>
                 </h:form>
             </h:column>
-            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+            <h:column style="width:3% ;border-color: #82bbd8">
                 <h:form>
                     <h:commandButton title="Удалить пользователя из системы"
                                      value="Удалить"

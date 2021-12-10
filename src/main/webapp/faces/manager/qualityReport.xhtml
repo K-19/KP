@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:form>
+            <h1>Отчёт качества текущего ассортимента</h1>
+
+            <div class="margin-text">
+                <h:outputText value="СОСТОЯНИЕ АССОРТИМЕНТА: Удовлетворительно" style="color: green" rendered="#{managerBean.commonStatusIsOk()}"/>
+                <h:outputText value="СОСТОЯНИЕ АССОРТИМЕНТА: НЕУДОВЛЕТВОРИТЕЛЬНО" style="color: red" rendered="#{!managerBean.commonStatusIsOk()}"/>
+            </div>
+            <div class="margin-text">
+                <h:outputText value="Количество проблемных продуктов: #{managerBean.getAmountProblemsProducts()}" style="font-size: 20px"/>
+            </div>
+            <h:dataTable id="qualityTable"
+                         var="product"
+                         rowKey="#{product.id}"
+                         value="#{managerBean.CAproducts}"
+                         rowIndexVar="rowNum"
+                         emptyMessage="..."
+                         styleClass="infoTable"
+                         selectionMode="single">
+                <h:column>
+                    <f:facet name="header">№</f:facet>
+                    <h:outputText value="#{rowNum + 1}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Название</f:facet>
+                    <h:outputText value="#{product.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Тип продукта</f:facet>
+                    <h:outputText value="#{product.type.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Цена закупки</f:facet>
+                    <h:outputText value="#{product.purchasePrice}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Цена продажи</f:facet>
+                    <h:outputText value="#{product.sellingPrice}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Дата изготовления</f:facet>
+                    <h:outputText value="#{product.manufactureDate}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Страна-изготовитель</f:facet>
+                    <h:outputText value="#{product.manufacturerCountry.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Срок годности</f:facet>
+                    <h:outputText value="#{product.shelfLife}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Количество</f:facet>
+                    <h:outputText value="#{managerBean.CA.get(product)}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Количество на складе</f:facet>
+                    <h:outputText value="#{managerBean.CS.get(product)}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Свежесть</f:facet>
+                    <h:outputText rendered="#{managerBean.checkQualityProduct(product) eq 0}" value="Нет данных" style="color: red"/>
+                    <h:outputText rendered="#{managerBean.checkQualityProduct(product) eq 1}" value="#{managerBean.checkQualityProductToString(product)}" style="color: green"/>
+                    <h:outputText rendered="#{managerBean.checkQualityProduct(product) eq 2}" value="#{managerBean.checkQualityProductToString(product)}" style="color: yellow"/>
+                    <h:outputText rendered="#{managerBean.checkQualityProduct(product) eq 3}" value="#{managerBean.checkQualityProductToString(product)}" style="color: red"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Наличие замены</f:facet>
+                    <h:outputText rendered="#{!managerBean.checkReplacementProduct(product)}" value="Нет замены!" style="color: red"/>
+                    <h:outputText rendered="#{managerBean.checkReplacementProduct(product)}" value="Есть замена на складе" style="color: green"/>
+                </h:column>
+                <h:column>
+                    <h:commandButton title="Зафиксировать замену товара свежим аналогом со склада"
+                                     value="Заменить аналогом со склада"
+                                     rendered="#{managerBean.checkReplacementProduct(product) and managerBean.checkQualityProduct(product) ne 1}"
+                                     ajax="true"
+                                     actionListener="#{managerBean.replaceProductFromStorage(product)}"
+                                     process="qualityTable"
+                                     update="qualityTable">
+                    </h:commandButton>
+                    <h:commandButton title="Зафиксировать утилизацию товара"
+                                     value="Утилизирован"
+                                     style="color: red"
+                                     rendered="#{!managerBean.checkReplacementProduct(product) and managerBean.checkQualityProduct(product) ne 1}"
+                                     ajax="true"
+                                     actionListener="#{managerBean.utilProduct(product)}"
+                                     process="qualityTable"
+                                     update="qualityTable">
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

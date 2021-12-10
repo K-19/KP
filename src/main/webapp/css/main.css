@@ -1,3 +1,55 @@
+html {
+    height: 100vh;
+}
+
+body {
+    position: relative;
+    vertical-align: middle;
+    text-align: center;
+    height: 100%;
+    font-size: 17px;
+    margin: 0px;
+}
+
+.center-block {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 30%;
+}
+
+.main {
+    display: table;
+    width: 100%;
+}
+
+.inline-block {
+    display: table-cell;
+    padding: 30px;
+    height: 100%;
+    width: 50%;
+    vertical-align: top;
+}
+
+.topMenu {
+    text-align: right;
+}
+
+.topMenu, .topMenu-center {
+    padding: 10px;
+    border-bottom: 2px  solid black;
+}
+
+.topMenu-center {
+    text-align: center;
+}
+
+.createButton {
+    padding: 15px;
+}
+
 .p-grid {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -36,9 +88,80 @@
 
 .fullInput {
     min-width: 100px;
+    width: 70%;
+    margin: 15px;
+    padding: 10px;
+}
+
+.submitButton {
+    width: 30%;
+    padding: 5px;
+}
+
+.labelStyle {
+
+}
+
+.supportTable, .infoTable {
+    border-collapse: collapse;
     width: 100%;
 }
 
-.table {
-    border: 2px solid black;
+.supportTable td {
+    padding: 30px;
+}
+
+.infoTable {
+    border: 3px solid grey;
+}
+
+.infoTable th, .infoTable td {
+    border: 1px solid grey;
+    padding: 5px;
+}
+
+.buttonPanel {
+    display: table;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.buttonPanelElement {
+    display: table-cell;
+    margin: 10px;
+}
+
+.inputField {
+    padding: 10px;
+    margin: 5px;
+    width: 65%;
+}
+
+.inputElement {
+    text-align: right;
+}
+
+.errorMessage {
+    color: red;
+    margin: 8px;
+}
+
+.tablePage {
+    padding: 30px;
+    width: 100%;
+}
+
+.inputPanel-center {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.margin-text {
+    font-size: 30px;
+    margin: 10px;
+}
+
+.supportMessage {
+    width: 50%;
+    resize: none;
 }

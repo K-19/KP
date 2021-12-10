@@ -13,6 +13,14 @@
                              process="@this"
                              update="@this">
             </h:commandButton>
+            <h:commandButton title="Сформировать отчёт качества текущей продукции"
+                             value="Отчёт качества"
+                             rendered="true"
+                             ajax="true"
+                             actionListener="#{managerBean.createQualityReport}"
+                             process="@this managerPanel"
+                             update="@this managerPanel">
+            </h:commandButton>
 
             <h1>Текущий ассортимент</h1>
             <h:dataTable id="CATable"
@@ -21,33 +29,42 @@
                          value="#{managerBean.CAproducts}"
                          rowIndexVar="rowNum"
                          emptyMessage="..."
-                         styleClass="table"
+                         styleClass="infoTable"
                          selectionMode="single">
-                <h:column headerText="№" width="20">
+                <h:column>
+                    <f:facet name="header">№</f:facet>
                     <h:outputText value="#{rowNum + 1}"/>
                 </h:column>
-                <h:column headerText="Название" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Название</f:facet>
                     <h:outputText value="#{product.name}"/>
                 </h:column>
-                <h:column headerText="Тип продукта" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Тип продукта</f:facet>
                     <h:outputText value="#{product.type.name}"/>
                 </h:column>
-                <h:column headerText="Цена закупки" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Цена закупки</f:facet>
                     <h:outputText value="#{product.purchasePrice}"/>
                 </h:column>
-                <h:column headerText="Цена продажи" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Цена продажи</f:facet>
                     <h:outputText value="#{product.sellingPrice}"/>
                 </h:column>
-                <h:column headerText="Дата изготовления" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Дата изготовления</f:facet>
                     <h:outputText value="#{product.manufactureDate}"/>
                 </h:column>
-                <h:column headerText="Страна-изготовитель" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Страна-изготовитель</f:facet>
                     <h:outputText value="#{product.manufacturerCountry.name}"/>
                 </h:column>
-                <h:column headerText="Срок годности" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Срок годности</f:facet>
                     <h:outputText value="#{product.shelfLife}"/>
                 </h:column>
-                <h:column headerText="Количество" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Количество</f:facet>
                     <h:outputText value="#{managerBean.CA.get(product)}"/>
                 </h:column>
             </h:dataTable>

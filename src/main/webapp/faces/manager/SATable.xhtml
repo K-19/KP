@@ -4,7 +4,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
     <p:outputPanel>
         <h:form>
-            <h:panelGrid id="productPanelSA" rendered="#{managerBean.enableEditProductPanelSA}">
+            <h:panelGrid id="productPanelSA" styleClass="tablePage" rendered="#{managerBean.enableEditProductPanelSA}">
                 <ui:include src="editProductSA.xhtml"/>
             </h:panelGrid>
 
@@ -24,36 +24,45 @@
                          value="#{managerBean.SAproducts}"
                          rowIndexVar="rowNum"
                          emptyMessage="..."
-                         styleClass="table"
+                         styleClass="infoTable"
                          selectionMode="single">
-                <h:column headerText="№" width="20">
+                <h:column>
+                    <f:facet name="header">№</f:facet>
                     <h:outputText value="#{rowNum + 1}"/>
                 </h:column>
-                <h:column headerText="Название" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Название</f:facet>
                     <h:outputText value="#{product.name}"/>
                 </h:column>
-                <h:column headerText="Тип продукта" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Тип продукта</f:facet>
                     <h:outputText value="#{product.type.name}"/>
                 </h:column>
-                <h:column headerText="Цена закупки" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Цена закупки</f:facet>
                     <h:outputText value="#{product.purchasePrice}"/>
                 </h:column>
-                <h:column headerText="Цена продажи" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Цена продажи</f:facet>
                     <h:outputText value="#{product.sellingPrice}"/>
                 </h:column>
-                <h:column headerText="Дата изготовления" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Дата изготовления</f:facet>
                     <h:outputText value="#{product.manufactureDate}"/>
                 </h:column>
-                <h:column headerText="Страна-изготовитель" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Страна-изготовитель</f:facet>
                     <h:outputText value="#{product.manufacturerCountry.name}"/>
                 </h:column>
-                <h:column headerText="Срок годности" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Срок годности</f:facet>
                     <h:outputText value="#{product.shelfLife}"/>
                 </h:column>
-                <h:column headerText="Количество" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Количество</f:facet>
                     <h:outputText value="#{managerBean.SA.get(product)}"/>
                 </h:column>
-                <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                <h:column>
                     <h:commandButton title="Редактировать продукт"
                                      value="Редактировать"
                                      ajax="true"
@@ -62,7 +71,7 @@
                                      update="SATable productPanelSA">
                     </h:commandButton>
                 </h:column>
-                <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                <h:column>
                     <h:commandButton title="Удалить продукт"
                                      value="Удалить"
                                      ajax="true"

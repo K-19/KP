@@ -3,16 +3,18 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
     <p:outputPanel>
-        <h:form id="showCreateProviderPanelButton">
-            <h:commandButton title="Добавить нового поставщика"
-                             value="Новый поставщик"
-                             rendered="#{!directorBean.enableEditProviderPanel}"
-                             ajax="true"
-                             actionListener="#{directorBean.startCreateProvider}"
-                             process="@this"
-                             update="@this">
-            </h:commandButton>
-        </h:form>
+        <div class="createButton">
+            <h:form id="showCreateProviderPanelButton">
+                <h:commandButton title="Добавить нового поставщика"
+                                 value="Новый поставщик"
+                                 rendered="#{!directorBean.enableEditProviderPanel}"
+                                 ajax="true"
+                                 actionListener="#{directorBean.startCreateProvider}"
+                                 process="@this"
+                                 update="@this">
+                </h:commandButton>
+            </h:form>
+        </div>
 
         <h:dataTable id="providers"
                      var="provider"
@@ -20,21 +22,25 @@
                      value="#{directorBean.allProviders}"
                      rowIndexVar="rowNum"
                      emptyMessage="..."
-                     styleClass="table"
+                     styleClass="infoTable"
                      selectionMode="single">
-            <h:column headerText="Название" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Название</f:facet>
                 <h:outputText value="#{provider.name}"/>
             </h:column>
-            <h:column headerText="Страна" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Страна</f:facet>
                 <h:outputText value="#{provider.country.name}"/>
             </h:column>
-            <h:column headerText="Адрес" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Адрес</f:facet>
                 <h:outputText value="#{provider.address}"/>
             </h:column>
-            <h:column headerText="Среднее время поставок (дней)" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Среднее время поставок (дней)</f:facet>
                 <h:outputText value="#{provider.deliveryDays}"/>
             </h:column>
-            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+            <h:column>
                 <h:form>
                     <h:commandButton title="Редактировать поставщика"
                                      value="Редактировать"

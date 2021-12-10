@@ -13,7 +13,10 @@ import java.io.Serializable;
 public class Validator implements Serializable {
 
     public boolean valid(Object obj) {
-        if (obj instanceof User) {
+        if (obj instanceof String) {
+            return validField((String) obj);
+        }
+        else if (obj instanceof User) {
             User user = (User)obj;
             return validFields(user.getLogin(), user.getPassword(), user.getName(), user.getSurname());
         }
@@ -39,6 +42,12 @@ public class Validator implements Serializable {
                     return false;
             }
             return true;
+        }
+        else if (obj instanceof Sale) {
+            Sale sale = (Sale) obj;
+            if (!validFields(sale.getProduct(), sale.getOutlet()))
+                return false;
+            return sale.getPercent() > 0 && sale.getPercent() < 100;
         }
         return false;
     }

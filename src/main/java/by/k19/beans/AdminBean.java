@@ -54,16 +54,19 @@ public class AdminBean implements Serializable {
         manipulatedUser = new User();
         enableEditUserPanel = true;
         creatingNewUser = true;
+        CashDataBean.initialCash();
     }
     public void enableUpdatePanel() {
         enableEditUserPanel = true;
         updatingUser = true;
+        CashDataBean.initialCash();
     }
 
     public void enableCreateOutletPanel() {
         manipulatedOutlet = new Outlet();
         enableEditOutletPanel = true;
         creatingNewOutlet = true;
+        CashDataBean.initialCash();
     }
 
     public void closeEditUserPanel() {

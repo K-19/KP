@@ -2,10 +2,8 @@ package by.k19.beans;
 
 import by.k19.dao.ProductRequestDao;
 import by.k19.dao.PurchasesDao;
-import by.k19.model.Product;
-import by.k19.model.ProductProvider;
-import by.k19.model.ProductRequest;
-import by.k19.model.Purchase;
+import by.k19.dao.SalesDao;
+import by.k19.model.*;
 import lombok.Data;
 
 import javax.enterprise.context.SessionScoped;
@@ -13,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Data
 @Named
@@ -27,6 +26,7 @@ public class ManagerBean implements Serializable {
 
     private Product currentProduct;
     private Purchase currentPurchase;
+    private Sale currentSale;
     private Integer amountProduct;
     private boolean enablePanelSA;
     private boolean enablePanelSS;
@@ -38,9 +38,13 @@ public class ManagerBean implements Serializable {
     private boolean enableEditProductPanelSA;
     private boolean enableEditProductPanelSS;
     private boolean enableCreatePurchasePanel;
+    private boolean enableQualityReportPanel;
+    private boolean enableSales;
+    private boolean enableTechSupport;
     private boolean addingNewProductSA;
     private boolean creatingProductToPurchase;
     private boolean addingNewProductToPurchase;
+    private boolean creatingSale;
 
     private boolean addingNewProductSS;
     private boolean updatingProductSA;
@@ -96,6 +100,10 @@ public class ManagerBean implements Serializable {
 
     public List<Product> getSAproducts() {
         return new ArrayList<>(getSA().keySet());
+    }
+
+    public List<Sale> getSales() {
+        return db.findAll(Sale.class);
     }
 
     public List<Product> getPurchaseProducts() {
@@ -180,6 +188,11 @@ public class ManagerBean implements Serializable {
         addingNewProductSA = true;
     }
 
+    public void enableAddSalePanel() {
+        currentSale = new Sale();
+        creatingSale = true;
+    }
+
     public void enableProductToPurchase() {
         currentProduct = new Product();
         creatingProductToPurchase = true;
@@ -205,6 +218,9 @@ public class ManagerBean implements Serializable {
         enablePanelSS = false;
         enablePanelCA = false;
         enablePanelCS = false;
+        enableQualityReportPanel = false;
+        enableSales = false;
+        enableTechSupport = false;
     }
 
     public void showPanelSA() {
@@ -237,6 +253,16 @@ public class ManagerBean implements Serializable {
         enablePanelPurchases = true;
     }
 
+    public void showSalesPanel() {
+        closeAllTables();
+        enableSales = true;
+    }
+
+    public void showTechSupport() {
+        closeAllTables();
+        enableTechSupport = true;
+    }
+
     public void startQueryToMainStorage() {
         closeAllTables();
         enableQueryToMainStorage = true;
@@ -254,6 +280,10 @@ public class ManagerBean implements Serializable {
     public void deleteProductSS(Product product) {
         getSS().remove(product);
         db.update(currentUser.getUser().getOutlet());
+    }
+
+    public void deleteSale(Sale sale) {
+        db.delete(sale);
     }
 
     public void startUpdateProductPurchase(Product product, Integer amount) {
@@ -284,6 +314,12 @@ public class ManagerBean implements Serializable {
         enableEditProductPanelSA = false;
         addingNewProductSA = false;
         updatingProductSA = false;
+    }
+
+    public void disableSaleCreating() {
+        currentSale = null;
+        enableSales = true;
+        creatingSale = false;
     }
 
     public void disableAddProductPanelPurchase() {
@@ -343,6 +379,14 @@ public class ManagerBean implements Serializable {
             currentUser.getUser().getOutlet().setStandardAssortment(newSA);
             db.update(currentUser.getUser().getOutlet());
             disableAddProductPanelSA();
+        }
+    }
+
+    public void createSale() {
+        currentSale.setOutlet(currentUser.getUser().getOutlet());
+        if (validator.valid(currentSale)) {
+            db.save(currentSale);
+            disableSaleCreating();
         }
     }
 
@@ -441,5 +485,101 @@ public class ManagerBean implements Serializable {
             }
         }
         return products;
+    }
+
+    public List<Product> getAvailableProductsToSale() {
+        List<Product> result = new ArrayList<>(getCA().keySet());
+        for (Sale sale : ((SalesDao)db.getDao(Sale.class)).findFromOutletById(currentUser.getUser().getOutlet().getId())) {
+            result.remove(sale.getProduct());
+        }
+        return result;
+    }
+
+    public void createQualityReport() {
+        closeAllTables();
+        enableQualityReportPanel = true;
+    }
+
+    public int checkQualityProduct(Product product) {
+        if (product.getShelfLife() == null)
+            return 0;
+        long diff = product.getShelfLife().getTime() - new Date().getTime();
+        long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        if (days > 7)
+            return 1;
+        if (days > 0)
+            return 2;
+        if (days < 0)
+            return 3;
+        return 0;
+    }
+
+    public String checkQualityProductToString(Product product) {
+        long diff = product.getShelfLife().getTime() - new Date().getTime();
+        long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        switch(checkQualityProduct(product)) {
+            case 1: return "Свежий (" + days + " дней)";
+            case 2: return "Срок годности истекает (" + days + " дней)";
+            case 3: return "Срок годности ИСТЕК (" + Math.abs(days) + " дней назад)";
+            default: return "Нет данных";
+        }
+    }
+
+    public boolean checkReplacementProduct(Product product) {
+        for (Product csProduct : getCS().keySet()) {
+            if (csProduct.getName().equals(product.getName()) &&
+                csProduct.getShelfLife().getTime() > new Date().getTime())
+                return true;
+        }
+        return false;
+    }
+
+    public void replaceProductFromStorage(Product product) {
+        int amount = getCA().get(product);
+        getCA().remove(product);
+        Product csProduct = null;
+        for (Product csProd : getCS().keySet()) {
+            if (csProd.getName().equals(product.getName()) &&
+                    csProd.getShelfLife().getTime() > new Date().getTime())
+                csProduct = csProd;
+        }
+        if (csProduct != null) {
+            if (getCS().get(csProduct) > amount) {
+                getCS().put(csProduct, getCS().get(csProduct) - amount);
+                getCA().put(csProduct, amount);
+            }
+            else if (getCS().get(csProduct) == amount) {
+                getCS().remove(csProduct);
+                getCA().put(csProduct, amount);
+            }
+            else if (getCS().get(csProduct) < amount) {
+                getCA().put(csProduct, getCS().get(csProduct));
+                getCS().remove(csProduct);
+            }
+            db.update(currentUser.getUser().getOutlet());
+        }
+    }
+
+    public long getAmountProblemsProducts() {
+        long problems = 0;
+        for (Product product : getCA().keySet()) {
+            if (product.getShelfLife().getTime() < new Date().getTime()) {
+                problems += getCA().get(product);
+                problems += getCS().get(product);
+            }
+        }
+        return problems;
+    }
+
+    public boolean commonStatusIsOk() {
+        return getAmountProblemsProducts() == 0;
+    }
+
+    public void utilProduct(Product product) {
+        if (product.getShelfLife().getTime() < new Date().getTime()) {
+            getCA().remove(product);
+            getCS().remove(product);
+            db.update(currentUser.getUser().getOutlet());
+        }
     }
 }

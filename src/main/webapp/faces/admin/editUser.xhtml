@@ -5,48 +5,75 @@
     <p:outputPanel>
 
         <h:form id="updatingUserForm">
-            <h:outputLabel value="Логин"/>
 
-            <h:inputText id="regLogin" styleClass="fullInput"
-                         value="#{adminBean.manipulatedUser.login}"/>
+            <div class="inputElement">
+                <h:outputLabel value="Логин"/>
+                <h:inputText id="regLogin" styleClass="inputField"
+                             value="#{adminBean.manipulatedUser.login}"/>
+            </div>
 
-            <h:outputLabel value="Пароль"/>
+            <div class="inputElement">
+                <h:outputLabel value="Пароль"/>
+                <h:inputText id="regPassword" styleClass="inputField"
+                             value="#{adminBean.stringCreatedUserPassword}"/>
+            </div>
 
-            <h:inputText id="regPassword" styleClass="fullInput"
-                         value="#{adminBean.stringCreatedUserPassword}"/>
+            <div class="inputElement">
+                <h:outputLabel value="Имя"/>
+                <h:inputText id="regName" styleClass="inputField"
+                             value="#{adminBean.manipulatedUser.name}"/>
+            </div>
 
-            <h:outputLabel value="Имя"/>
+            <div class="inputElement">
+                <h:outputLabel value="Фамилия"/>
+                <h:inputText id="regSurname" styleClass="inputField"
+                             value="#{adminBean.manipulatedUser.surname}"/>
+            </div>
 
-            <h:inputText id="regName" styleClass="fullInput"
-                         value="#{adminBean.manipulatedUser.name}"/>
+            <div class="inputElement">
+                <h:outputLabel id="regTypeUser" value="Тип пользователя"/>
+                <h:selectOneMenu value="#{adminBean.manipulatedUser.type}" styleClass="inputField">
+                    <f:selectItems value="#{databaseBean.userTypes}"/>
+                </h:selectOneMenu>
+            </div>
 
-            <h:outputLabel value="Фамилия"/>
+            <div class="inputElement">
+                <h:outputLabel id="regUserOutlet" value="Связанный торговый объект"/>
+                <h:selectOneMenu value="#{adminBean.manipulatedUser.outlet}" styleClass="inputField">
+                    <f:selectItems value="#{adminBean.allOutlets}"/>
+                </h:selectOneMenu>
+            </div>
 
-            <h:inputText id="regSurname" styleClass="fullInput"
-                         value="#{adminBean.manipulatedUser.surname}"/>
+            <div class="inputElement">
+                <h:outputLabel value="Дата рождения (дд-ММ-гггг)"/>
+                <h:inputText id="regBirthday" styleClass="inputField"
+                             value="#{adminBean.manipulatedUser.birthday}">
+                    <f:convertDateTime pattern="dd-MM-yyyy"/>
+                </h:inputText>
+            </div>
 
-            <h:outputLabel id="regTypeUser" value="Тип пользователя"/>
-            <h:selectOneMenu value="#{adminBean.manipulatedUser.type}">
-                <f:selectItems value="#{databaseBean.userTypes}"/>
-            </h:selectOneMenu>
+            <h:messages styleClass="errorMessage"/>
 
-            <h:outputLabel id="regUserOutlet" value="Связанный торговый объект"/>
-            <h:selectOneMenu value="#{adminBean.manipulatedUser.outlet}">
-                <f:selectItems value="#{adminBean.allOutlets}"/>
-            </h:selectOneMenu>
+            <div class="buttonPanel">
+                <h:commandButton styleClass="buttonPanelElement"
+                                 id="userRegistration"
+                                 actionListener="#{adminBean.createUser}"
+                                 value="Зарегистрировать пользователя"
+                                 rendered="#{adminBean.creatingNewUser}"
+                                 process="@this showCreateUserPanelButton outlets"/>
+                <h:commandButton styleClass="buttonPanelElement"
+                                 id="userUpdating"
+                                 actionListener="#{adminBean.updateUser}"
+                                 value="Обновить пользователя"
+                                 rendered="#{adminBean.updatingUser}"
+                                 process="@this outlets"/>
+                <h:commandButton styleClass="buttonPanelElement"
+                                 id="cancelUpdating"
+                                 actionListener="#{adminBean.closeEditUserPanel}"
+                                 value="Отмена"
+                                 process="@this"/>
+            </div>
 
-            <h:outputLabel value="Дата рождения (дд-ММ-гггг)"/>
-
-            <h:inputText id="regBirthday" styleClass="fullInput"
-                         value="#{adminBean.manipulatedUser.birthday}">
-                <f:convertDateTime pattern="dd-MM-yyyy"/>
-            </h:inputText>
-
-            <h:messages style = "color:red;margin:8px;" />
-
-            <h:commandButton id="userRegistration" actionListener="#{adminBean.createUser}" value="Зарегистрировать пользователя" rendered="#{adminBean.creatingNewUser}" process="@this showCreateUserPanelButton outlets"/>
-            <h:commandButton id="userUpdating" actionListener="#{adminBean.updateUser}" value="Обновить пользователя" rendered="#{adminBean.updatingUser}" process="@this outlets"/>
-            <h:commandButton id="cancelUpdating" actionListener="#{adminBean.closeEditUserPanel}" value="Отмена" process="@this"/>
         </h:form>
     </p:outputPanel>
 </ui:composition>

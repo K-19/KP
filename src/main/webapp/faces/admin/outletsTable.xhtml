@@ -1,40 +1,48 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
     <p:outputPanel>
 
-        <h:form id="showCreateOutletPanelButton">
-            <h:commandButton title="Создать новую торговую точку"
-                             value="Новая торговая точка"
-                             rendered="#{!adminBean.enableEditOutletPanel}"
-                             ajax="true"
-                             actionListener="#{adminBean.enableCreateOutletPanel}"
-                             process="outletsPanel @this"
-                             update="outletsPanel @this">
-            </h:commandButton>
-        </h:form>
+        <div class="createButton">
+            <h:form id="showCreateOutletPanelButton">
+                <h:commandButton title="Создать новую торговую точку"
+                                 value="Новая торговая точка"
+                                 rendered="#{!adminBean.enableEditOutletPanel}"
+                                 ajax="true"
+                                 actionListener="#{adminBean.enableCreateOutletPanel}"
+                                 process="outletsPanel @this"
+                                 update="outletsPanel @this">
+                </h:commandButton>
+            </h:form>
+        </div>
 
         <h:dataTable id="outlets"
                      var="outlet"
                      rowKey="#{outlet.id}"
                      value="#{adminBean.allOutlets}"
+                     styleClass="infoTable"
                      rowIndexVar="rowNum"
                      emptyMessage="..."
                      selectionMode="single">
-            <h:column headerText="Название" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Название</f:facet>
                 <h:outputText value="#{outlet.name}"/>
             </h:column>
-            <h:column headerText="Страна" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Страна</f:facet>
                 <h:outputText value="#{outlet.country.name}"/>
             </h:column>
-            <h:column headerText="Адрес" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Адрес</f:facet>
                 <h:outputText value="#{outlet.address}"/>
             </h:column>
-            <h:column headerText="Ответственные:" style="width:400px;border-color: #82bbd8">
+            <h:column>
+                <f:facet name="header">Ответственные</f:facet>
                 <h:outputText value="#{adminBean.getOutletHrs(outlet)}"/>
             </h:column>
-            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+            <h:column style="width:3% ;border-color: #82bbd8">
                 <h:form>
                     <h:commandButton title="Редактировать торговую точку"
                                      value="Редактировать"
@@ -45,7 +53,7 @@
                     </h:commandButton>
                 </h:form>
             </h:column>
-            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+            <h:column style="width:3% ;border-color: #82bbd8">
                 <h:form>
                     <h:commandButton title="Удалить торговую точку"
                                      value="Удалить"

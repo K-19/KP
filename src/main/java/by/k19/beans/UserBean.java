@@ -2,6 +2,7 @@ package by.k19.beans;
 
 
 import by.k19.dao.CountriesDao;
+import by.k19.dao.TechMessagesDao;
 import by.k19.dao.UserDao;
 import by.k19.model.*;
 import lombok.Data;
@@ -15,6 +16,7 @@ import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,12 +25,13 @@ import java.util.List;
 public class UserBean implements Serializable {
     @Inject
     private DatabaseBean db;
+    @Inject
+    private Validator validator;
+
     private User user;
     private String login;
     private String stringPassword;
-
-
-
+    private String techSupportQuestion;
 
     public void login() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -82,5 +85,19 @@ public class UserBean implements Serializable {
         return (stringPassword != null &&
                 !stringPassword.isEmpty()
                 && login != null && !login.isEmpty());
+    }
+
+    public List<TechMessage> getHistorySupportMessage() {
+        return ((TechMessagesDao)db.getDao(TechMessage.class)).findAllByUserId(user.getId());
+    }
+
+    public void sendTechMessage() {
+        if (validator.valid(techSupportQuestion)) {
+            TechMessage newMessage = new TechMessage();
+            newMessage.setUser(user);
+            newMessage.setQuestionDate(new Date());
+            newMessage.setQuestion(techSupportQuestion);
+            db.save(newMessage);
+        }
     }
 }

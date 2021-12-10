@@ -24,6 +24,10 @@ public class DaoFactory {
             return ProductRequestDao.getInstance();
         } else if (clazz.equals(Purchase.class)) {
             return PurchasesDao.getInstance();
+        } else if (clazz.equals(Sale.class)) {
+            return SalesDao.getInstance();
+        }  else if (clazz.equals(TechMessage.class)) {
+            return TechMessagesDao.getInstance();
         }
         else throw new IllegalArgumentException();
     }
@@ -45,6 +49,10 @@ public class DaoFactory {
             return ProductRequestDao.getInstance();
         } else if (obj instanceof Purchase) {
             return PurchasesDao.getInstance();
+        } else if (obj instanceof Sale) {
+            return SalesDao.getInstance();
+        } else if (obj instanceof TechMessage) {
+            return TechMessagesDao.getInstance();
         }
         else throw new IllegalArgumentException();
     }

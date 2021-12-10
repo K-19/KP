@@ -6,21 +6,33 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view>
-    <ui:include src="../topMenu.xhtml"/>
+    <h:head>
+        <link type="text/css" rel="stylesheet" href="../../css/main.css"/>
+    </h:head>
+    <div class="main">
+        <div class="topMenu">
+            <ui:include src="../topMenu.xhtml"/>
+        </div>
+        <div>
+            <div class="inline-block">
+                <h:panelGroup id="adminPanel">
+                    <h:panelGrid rendered="#{adminBean.enableEditUserPanel}">
+                        <ui:include src="editUser.xhtml"/>
+                    </h:panelGrid>
+                    <ui:include src="usersTable.xhtml"/>
+                </h:panelGroup>
+            </div>
 
-    <h:panelGroup id="adminPanel">
-        <h:panelGrid rendered="#{adminBean.enableEditUserPanel}">
-            <ui:include src="editUser.xhtml"/>
-        </h:panelGrid>
-        <ui:include src="usersTable.xhtml"/>
-    </h:panelGroup>
-
-    <h:panelGroup id="outletsPanel">
-        <h:panelGrid rendered="#{adminBean.enableEditOutletPanel}">
-            <ui:include src="editOutlet.xhtml"/>
-        </h:panelGrid>
-        <ui:include src="outletsTable.xhtml"/>
-    </h:panelGroup>
+            <div class="inline-block">
+                <h:panelGroup id="outletsPanel">
+                    <h:panelGrid rendered="#{adminBean.enableEditOutletPanel}">
+                        <ui:include src="editOutlet.xhtml"/>
+                    </h:panelGrid>
+                    <ui:include src="outletsTable.xhtml"/>
+                </h:panelGroup>
+            </div>
+        </div>
+    </div>
 
 </f:view>
 </html>

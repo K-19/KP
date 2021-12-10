@@ -11,21 +11,26 @@
                          value="#{managerBean.requestList}"
                          rowIndexVar="rowNum"
                          emptyMessage="..."
-                         styleClass="table"
+                         styleClass="infoTable"
                          selectionMode="single">
-                <h:column headerText="№" width="20">
+                <h:column>
+                    <f:facet name="header">№</f:facet>
                     <h:outputText value="#{rowNum + 1}"/>
                 </h:column>
-                <h:column headerText="Отправлен" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Отправлен</f:facet>
                     <h:outputText value="#{prodRequest.startTimeString}"/>
                 </h:column>
-                <h:column headerText="Исполнен" style="width:400px;border-color: #82bbd8">
+                <h:column >
+                    <f:facet name="header">Исполнен</f:facet>
                     <h:outputText value="#{prodRequest.acceptTimeString}"/>
                 </h:column>
-                <h:column headerText="Сотрудник, сделавший запрос" style="width:400px;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Сотрудник, сделавший запрос</f:facet>
                     <h:outputText value="#{prodRequest.user.shortName}"/>
                 </h:column>
-                <h:column headerText="Статус" style="width:3% ;border-color: #82bbd8">
+                <h:column>
+                    <f:facet name="header">Статус</f:facet>
                     <h:outputText style="color: green" value="Удовлетворен" rendered="#{prodRequest.acceptTime ne null}"/>
                     <h:commandButton title="Зафиксировать факт принятия товара на торговую точку"
                                      value="Удовлетворить запрос"
@@ -36,7 +41,7 @@
                                      update="requestsTable">
                     </h:commandButton>
                 </h:column>
-                <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
+                <h:column>
                     <h:commandButton title="Удалить запрос"
                                      value="Удалить запрос"
                                      ajax="true"

@@ -5,25 +5,42 @@
     <p:outputPanel>
 
         <h:form id="updatingOutletForm">
-            <h:outputLabel value="Название"/>
+            <div class="inputElement">
+                <h:outputLabel value="Название"/>
+                <h:inputText id="outletName" styleClass="inputField"
+                             value="#{adminBean.manipulatedOutlet.name}"/>
+            </div>
 
-            <h:inputText id="outletName" styleClass="fullInput"
-                         value="#{adminBean.manipulatedOutlet.name}"/>
+            <div class="inputElement">
+                <h:outputLabel value="Адрес"/>
+                <h:inputText id="outletAddress" styleClass="inputField"
+                             value="#{adminBean.manipulatedOutlet.address}"/>
+            </div>
 
-            <h:outputLabel value="Адрес"/>
+            <div class="inputElement">
+                <h:outputLabel value="Страна"/>
+                <h:selectOneMenu value="#{adminBean.manipulatedOutlet.country}" styleClass="inputField">
+                    <f:selectItems value="#{databaseBean.countryTypes}"/>
+                </h:selectOneMenu>
+            </div>
 
-            <h:inputText id="outletAddress" styleClass="fullInput"
-                         value="#{adminBean.manipulatedOutlet.address}"/>
-
-            <h:outputLabel value="Страна"/>
-
-            <h:selectOneMenu value="#{adminBean.manipulatedOutlet.country}">
-                <f:selectItems value="#{databaseBean.countryTypes}"/>
-            </h:selectOneMenu>
-
-            <h:commandButton actionListener="#{adminBean.createOutlet}" value="Зарегистрировать торговую точку" rendered="#{adminBean.creatingNewOutlet}" process="@this showCreateOutletPanelButton"/>
-            <h:commandButton actionListener="#{adminBean.updateOutlet}" value="Обновить торговую точку" rendered="#{adminBean.updatingOutlet}" process="@this"/>
-            <h:commandButton actionListener="#{adminBean.closeEditOutletPanel}" value="Отмена торговой точки" process="@this"/>
+            <div class="buttonPanel">
+                <h:commandButton styleClass="buttonPanelElement"
+                                 actionListener="#{adminBean.createOutlet}"
+                                 value="Зарегистрировать торговую точку"
+                                 rendered="#{adminBean.creatingNewOutlet}"
+                                 process="@this showCreateOutletPanelButton"/>
+                <h:commandButton styleClass="buttonPanelElement"
+                                 actionListener="#{adminBean.updateOutlet}"
+                                 value="Обновить торговую точку"
+                                 rendered="#{adminBean.updatingOutlet}"
+                                 process="@this"/>
+                <h:commandButton styleClass="buttonPanelElement"
+                                 actionListener="#{adminBean.closeEditOutletPanel}"
+                                 value="Отмена торговой точки"
+                                 process="@this"/>
+            </div>
+            <h:messages styleClass="errorMessage"/>
         </h:form>
     </p:outputPanel>
 </ui:composition>

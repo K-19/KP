@@ -2,25 +2,47 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
-    <p:outputPanel>
+    <p:outputPanel styleClass="inputPanel-center">
 
-        <h:selectOneMenu value="#{managerBean.currentProduct}" rendered="#{!managerBean.updatingProductSS}">
-            <f:selectItems value="#{managerBean.getAvailableProducts(false)}"/>
-        </h:selectOneMenu>
+        <div class="inputElement">
+            <h:outputLabel value="Товар" rendered="#{!managerBean.updatingProductSS}"/>
+            <h:selectOneMenu value="#{managerBean.currentProduct}" styleClass="inputField" rendered="#{!managerBean.updatingProductSS}">
+                <f:selectItems value="#{managerBean.getAvailableProducts(false)}"/>
+            </h:selectOneMenu>
+        </div>
 
-        <h:outputText value="#{managerBean.currentProduct}" rendered="#{managerBean.updatingProductSS}"/>
+        <div class="inputElement">
+            <h:outputLabel value="Товар: " rendered="#{managerBean.updatingProductSS}"/>
+            <h:outputText value="#{managerBean.currentProduct}" rendered="#{managerBean.updatingProductSS}"/>
+        </div>
 
-        <h:outputLabel value="Количество"/>
+        <div class="inputElement">
+            <h:outputLabel value="Количество"/>
+            <h:inputText id="regAmount" styleClass="fullInput"
+                         value="#{managerBean.amountProduct}"/>
+        </div>
 
-        <h:inputText id="regAmount" styleClass="fullInput"
-                     value="#{managerBean.amountProduct}"/>
+        <div class="buttonPanel">
+            <h:commandButton styleClass="buttonPanelElement"
+                             id="productRegistration"
+                             actionListener="#{managerBean.createProductSS}"
+                             value="Добавить продукт"
+                             rendered="#{managerBean.addingNewProductSS}"
+                             process="@this showCreateProductStoragePanelButton"/>
+            <h:commandButton styleClass="buttonPanelElement"
+                             id="productUpdating"
+                             actionListener="#{managerBean.updateProductSS}"
+                             value="Обновить продукт"
+                             rendered="#{managerBean.updatingProductSS}"
+                             process="@this showCreateProductStoragePanelButton"/>
+            <h:commandButton styleClass="buttonPanelElement"
+                             id="cancelProductRegistration"
+                             actionListener="#{managerBean.disableAddProductPanelSS}"
+                             value="Отмена"
+                             process="@this showCreateProductStoragePanelButton"/>
+        </div>
 
-        <h:messages style = "color:red;margin:8px;" />
-
-        <h:commandButton id="productRegistration" actionListener="#{managerBean.createProductSS}" value="Добавить продукт" rendered="#{managerBean.addingNewProductSS}" process="@this showCreateProductStoragePanelButton"/>
-        <h:commandButton id="productUpdating" actionListener="#{managerBean.updateProductSS}" value="Обновить продукт" rendered="#{managerBean.updatingProductSS}" process="@this showCreateProductStoragePanelButton"/>
-        <h:commandButton id="cancelProductRegistration" actionListener="#{managerBean.disableAddProductPanelSS}" value="Отмена" process="@this showCreateProductStoragePanelButton"/>
-
+        <h:messages styleClass="errorMessage"/>
 
     </p:outputPanel>
 </ui:composition>

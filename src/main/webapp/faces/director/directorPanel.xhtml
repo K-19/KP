@@ -4,15 +4,60 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view>
-    <ui:include src="../topMenu.xhtml"/>
-
-    <h:panelGroup id="directorPanel">
-        <h:panelGrid id="createPanel" rendered="#{directorBean.enableEditProviderPanel}">
-            <ui:include src="editProvider.xhtml"/>
-        </h:panelGrid>
-        <ui:include src="providersTable.xhtml"/>
-    </h:panelGroup>
+    <h:head>
+        <link type="text/css" rel="stylesheet" href="../../css/main.css"/>
+    </h:head>
+    <div class="main">
+        <div class="topMenu-center">
+            <p:outputPanel>
+                <h:form>
+                    <h:commandButton title="Открыть панель управления поставщиками"
+                                     value="Поставщики"
+                                     styleClass="buttonPanelElement"
+                                     ajax="true"
+                                     actionListener="#{directorBean.showProviders}"
+                                     process="@this"
+                                     update="@this">
+                    </h:commandButton>
+                    <h:commandButton title="Техподдержка"
+                                     value="Техподдержка"
+                                     styleClass="buttonPanelElement"
+                                     ajax="true"
+                                     actionListener="#{directorBean.showTechSupport}"
+                                     process="@this"
+                                     update="@this">
+                    </h:commandButton>
+                    <h:commandButton id="exitAccount"
+                                     styleClass="buttonPanelElement"
+                                     actionListener="#{userBean.exitAccount}"
+                                     value="Выход"/>
+                </h:form>
+            </p:outputPanel>
+        </div>
+        <div>
+            <h:panelGrid id="supportPanel" styleClass="tablePage" rendered="#{directorBean.enableTechSupport}">
+                <ui:include src="../techSupport/supportPanel.xhtml"/>
+            </h:panelGrid>
+            <h:panelGrid rendered="#{directorBean.enableProvidersPanel}">
+                <div class="inline-block">
+                    <h:panelGroup id="directorPanel">
+                        <h:panelGrid id="createPanel" rendered="#{directorBean.enableEditProviderPanel}">
+                            <ui:include src="editProvider.xhtml"/>
+                        </h:panelGrid>
+                        <ui:include src="providersTable.xhtml"/>
+                    </h:panelGroup>
+                </div>
+                <h:panelGroup id="directorPanel2" styleClass="inline-block" rendered="#{directorBean.enableEditProviderPanel}">
+                    <h:panelGrid id="productPanel" rendered="#{directorBean.enableEditProductPanel}">
+                        <ui:include src="editProduct.xhtml"/>
+                    </h:panelGrid>
+                        <ui:include src="productsTable.xhtml"/>
+                </h:panelGroup>
+            </h:panelGrid>
+        </div>
+    </div>
 </f:view>
 </html>

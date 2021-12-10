@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel styleClass="inputPanel-center">
+        <h:form>
+            <div>
+                <h:inputTextarea value="#{userBean.techSupportQuestion}" styleClass="supportMessage"/>
+            </div>
+
+            <h:commandButton styleClass="buttonPanelElement"
+                             title="Отправить сообщение администрации"
+                             id="sendTechSupportMessage"
+                             value="Отправить сообщение"
+                             ajax="true"
+                             actionListener="#{userBean.sendTechMessage}"
+                             process="@this"
+                             update="@this">
+            </h:commandButton>
+            <h3>История сообщений</h3>
+            <h:dataTable id="messagesTable"
+                         var="message"
+                         rowKey="#{message.id}"
+                         value="#{userBean.historySupportMessage}"
+                         emptyMessage="..."
+                         styleClass="supportTable"
+                         selectionMode="single">
+                <h:column>
+                    <h:outputText value="#{message.idString}"/>
+                    <br/>
+                    <h:outputText value="#{message.questionDateString}"/>
+                    <br/>
+                    <h:outputText value="#{message.question}"/>
+                </h:column>
+                <h:column>
+                    <h:outputText value="#{message.adminString}"/>
+                    <br/>
+                    <h:outputText value="#{message.answerDateString}"/>
+                    <br/>
+                    <h:outputText value="#{message.answer}"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

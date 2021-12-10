@@ -29,12 +29,35 @@ public class DirectorBean implements Serializable {
     private boolean enableEditProductPanel;
     private boolean addingNewProduct;
     private boolean updatingProduct;
+    private boolean enableTechSupport;
+    private boolean enableProvidersPanel;
     private ProductProvider currentProvider = new ProductProvider();
     private Product currentProduct = new Product();
     private Integer amountProduct;
 
     public List<ProductProvider> getAllProviders() {
         return db.findAll(ProductProvider.class);
+    }
+
+    public void closeAllPaged() {
+        enableEditProviderPanel = false;
+        creatingProvider = false;
+        updatingProvider = false;
+        enableEditProductPanel = false;
+        addingNewProduct = false;
+        updatingProduct = false;
+        enableTechSupport = false;
+        enableProvidersPanel = false;
+    }
+
+    public void showProviders() {
+        closeAllPaged();
+        enableProvidersPanel = true;
+    }
+
+    public void showTechSupport() {
+        closeAllPaged();
+        enableTechSupport = true;
     }
 
     public ProductProvider getCurrentProvider() {
@@ -47,6 +70,7 @@ public class DirectorBean implements Serializable {
         currentProvider = new ProductProvider();
         enableEditProviderPanel = true;
         creatingProvider = true;
+        CashDataBean.initialCash();
     }
 
     public void createProvider() {
@@ -61,6 +85,7 @@ public class DirectorBean implements Serializable {
         currentProvider = provider;
         enableEditProviderPanel = true;
         updatingProvider = true;
+        CashDataBean.initialCash();
     }
 
 
@@ -92,17 +117,27 @@ public class DirectorBean implements Serializable {
 
     public void updateProduct() {
         if (validator.valid(currentProduct)) {
-            if (creatingProvider) {
-                Map<Product, Integer> newMap = new HashMap<>();
-                for (Product product : currentProvider.getProductMap().keySet()) {
-                    if (product.getId() == currentProduct.getId())
-                        newMap.put(currentProduct, amountProduct);
-                    else newMap.put(product, currentProvider.getProductMap().get(product));
-                }
-                currentProvider.setProductMap(newMap);
+            Map<Product, Integer> newMap = new HashMap<>();
+            for (Product product : currentProvider.getProductMap().keySet()) {
+                if (product.getId() == currentProduct.getId())
+                    newMap.put(currentProduct, amountProduct);
+                else newMap.put(product, currentProvider.getProductMap().get(product));
             }
-            else
-                db.update(currentProduct);
+            currentProvider.setProductMap(newMap);
+            if (updatingProduct)
+                db.update(currentProvider);
+//            if (creatingProvider) {
+//                Map<Product, Integer> newMap = new HashMap<>();
+//                for (Product product : currentProvider.getProductMap().keySet()) {
+//                    if (product.getId() == currentProduct.getId())
+//                        newMap.put(currentProduct, amountProduct);
+//                    else newMap.put(product, currentProvider.getProductMap().get(product));
+//                }
+//                currentProvider.setProductMap(newMap);
+//            }
+//            else {
+//                db.update(currentProduct);
+//            }
             disableAddProductPanel();
         }
     }
@@ -114,6 +149,7 @@ public class DirectorBean implements Serializable {
         amountProduct = amount;
         enableEditProductPanel = true;
         updatingProduct = true;
+        CashDataBean.initialCash();
     }
 
     public void deleteProvider(ProductProvider provider) {
@@ -138,6 +174,7 @@ public class DirectorBean implements Serializable {
         currentProduct = new Product();
         enableEditProductPanel = true;
         addingNewProduct = true;
+        CashDataBean.initialCash();
     }
 
     public void disableAddProductPanel() {
