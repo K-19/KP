@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:panelGrid rendered="#{managerBean.announces.size() eq 0}">
+            <h:outputText value="Пока нет объявлений от директоров"/>
+        </h:panelGrid>
+        <h:panelGrid rendered="#{managerBean.announces.size() ne 0}" style="width: 100%">
+            <ui:repeat value="#{managerBean.announces}" var="action">
+                <h:panelGrid style="width: 100%">
+                    <h:outputText value="#{action.getDescription(1)}"/>
+                    <h:outputText value="#{action.getDescription(2)}"/>
+                    <h:outputText value="#{action.getDescription(3)}"/>
+                    <hr/>
+                </h:panelGrid>
+            </ui:repeat>
+        </h:panelGrid>
+    </p:outputPanel>
+</ui:composition>

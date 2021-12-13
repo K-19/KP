@@ -3,76 +3,88 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
     <p:outputPanel>
-        <h:panelGrid id="createPurchase" rendered="#{managerBean.creatingProductToPurchase}">
-            <ui:include src="createPurchase.xhtml"/>
-        </h:panelGrid>
+        <h:form>
+            <h:panelGrid id="createPurchase" rendered="#{managerBean.creatingProductToPurchase}" style="width: 100%">
+                <ui:include src="createPurchase.xhtml"/>
+            </h:panelGrid>
 
-        <h:commandButton title="Добавить товар в покупку"
-                         id="showCreateProductPurchasePanelButton"
-                         value="Добавить товар в покупку"
-                         rendered="#{!managerBean.creatingProductToPurchase}"
-                         ajax="true"
-                         actionListener="#{managerBean.enableProductToPurchase}"
-                         process="@this createPurchase"
-                         update="@this createPurchase">
-        </h:commandButton>
-        <h:commandButton id="purchaseRegistration" actionListener="#{managerBean.createPurchase()}" value="Оформить покупку" process="@this showCreateProductPurchasePanelButton"/>
-        <h:commandButton id="cancelPurchaseRegistration" actionListener="#{managerBean.disableCreatePanel}" value="Отмена" process="@this showCreateProductPurchasePanelButton"/>
+            <h:commandButton title="Добавить товар в покупку"
+                             id="showCreateProductPurchasePanelButton"
+                             value="Добавить товар в покупку"
+                             styleClass="buttonPanelElement"
+                             rendered="#{!managerBean.creatingProductToPurchase and managerBean.getAvailableToPurchaseProducts().size() ne 0}"
+                             ajax="true"
+                             actionListener="#{managerBean.enableProductToPurchase}"
+                             process="@this createPurchase"
+                             update="@this createPurchase">
+            </h:commandButton>
+            <h:commandButton id="purchaseRegistration" styleClass="buttonPanelElement" actionListener="#{managerBean.createPurchase()}" value="Оформить покупку" process="@this showCreateProductPurchasePanelButton"/>
+            <h:commandButton id="cancelPurchaseRegistration" styleClass="buttonPanelElement" actionListener="#{managerBean.disableCreatePanel}" value="Отменить оформление покупки" process="@this showCreateProductPurchasePanelButton"/>
 
-        <h1>Товары</h1>
-        <h:dataTable id="productsPurchaseTable"
-                     var="product"
-                     rowKey="#{product.id}"
-                     value="#{managerBean.purchaseProducts}"
-                     rowIndexVar="rowNum"
-                     emptyMessage="..."
-                     styleClass="table"
-                     selectionMode="single">
-            <h:column headerText="№" width="20">
-                <h:outputText value="#{rowNum + 1}"/>
-            </h:column>
-            <h:column headerText="Название" style="width:400px;border-color: #82bbd8">
-                <h:outputText value="#{product.name}"/>
-            </h:column>
-            <h:column headerText="Тип продукта" style="width:400px;border-color: #82bbd8">
-                <h:outputText value="#{product.type.name}"/>
-            </h:column>
-            <h:column headerText="Цена закупки" style="width:400px;border-color: #82bbd8">
-                <h:outputText value="#{product.purchasePrice}"/>
-            </h:column>
-            <h:column headerText="Цена продажи" style="width:400px;border-color: #82bbd8">
-                <h:outputText value="#{product.sellingPrice}"/>
-            </h:column>
-            <h:column headerText="Дата изготовления" style="width:400px;border-color: #82bbd8">
-                <h:outputText value="#{product.manufactureDate}"/>
-            </h:column>
-            <h:column headerText="Страна-изготовитель" style="width:400px;border-color: #82bbd8">
-                <h:outputText value="#{product.manufacturerCountry.name}"/>
-            </h:column>
-            <h:column headerText="Срок годности" style="width:400px;border-color: #82bbd8">
-                <h:outputText value="#{product.shelfLife}"/>
-            </h:column>
-            <h:column headerText="Количество" style="width:400px;border-color: #82bbd8">
-                <h:outputText value="#{managerBean.currentPurchase.products.get(product)}"/>
-            </h:column>
-            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
-                <h:commandButton title="Редактировать продукт"
-                                 value="Редактировать"
-                                 ajax="true"
-                                 actionListener="#{managerBean.startUpdateProductPurchase(product, managerBean.currentPurchase.products.get(product))}"
-                                 process="SATable createPurchase"
-                                 update="SATable createPurchase">
-                </h:commandButton>
-            </h:column>
-            <h:column headerText="..." style="width:3% ;border-color: #82bbd8">
-                <h:commandButton title="Удалить продукт"
-                                 value="Удалить"
-                                 ajax="true"
-                                 actionListener="#{managerBean.deleteProductPurchase(product)}"
-                                 process="@this productsPurchaseTable"
-                                 update="@this productsPurchaseTable">
-                </h:commandButton>
-            </h:column>
-        </h:dataTable>
+            <h1>Список товаров текущей покупки</h1>
+            <h:dataTable id="productsPurchaseTable"
+                         var="product"
+                         rowKey="#{product.id}"
+                         value="#{managerBean.purchaseProducts}"
+                         rowIndexVar="rowNum"
+                         emptyMessage="..."
+                         styleClass="infoTable"
+                         selectionMode="single">
+                <h:column>
+                    <f:facet name="header">№</f:facet>
+                    <h:outputText value="#{rowNum + 1}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Название</f:facet>
+                    <h:outputText value="#{product.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Тип продукта</f:facet>
+                    <h:outputText value="#{product.type.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Цена закупки</f:facet>
+                    <h:outputText value="#{product.purchasePrice}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Цена продажи</f:facet>
+                    <h:outputText value="#{product.sellingPrice}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Дата изготовления</f:facet>
+                    <h:outputText value="#{product.manufactureDate}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Страна-изготовитель</f:facet>
+                    <h:outputText value="#{product.manufacturerCountry.name}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Срок годности</f:facet>
+                    <h:outputText value="#{product.shelfLife}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Количество</f:facet>
+                    <h:outputText value="#{managerBean.currentPurchase.products.get(product)}"/>
+                </h:column>
+                <h:column>
+                    <h:commandButton title="Редактировать продукт"
+                                     value="Редактировать"
+                                     ajax="true"
+                                     actionListener="#{managerBean.startUpdateProductPurchase(product, managerBean.currentPurchase.products.get(product))}"
+                                     process="SATable createPurchase"
+                                     update="SATable createPurchase">
+                    </h:commandButton>
+                </h:column>
+                <h:column>
+                    <h:commandButton title="Удалить продукт"
+                                     value="Удалить"
+                                     ajax="true"
+                                     actionListener="#{managerBean.deleteProductPurchase(product)}"
+                                     process="@this productsPurchaseTable"
+                                     update="@this productsPurchaseTable">
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
     </p:outputPanel>
 </ui:composition>

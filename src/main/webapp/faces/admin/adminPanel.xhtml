@@ -4,33 +4,57 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view>
     <h:head>
         <link type="text/css" rel="stylesheet" href="../../css/main.css"/>
+        <title>#{adminBean.currentAdmin.user.fio}</title>
     </h:head>
-    <div class="main">
-        <div class="topMenu">
-            <ui:include src="../topMenu.xhtml"/>
+    <div class="main" style="width: 100%">
+        <div class="topMenu-center">
+            <p:outputPanel>
+                <h:form>
+                    <h:commandButton title="Открыть панель управления"
+                                     value="Панель управления"
+                                     styleClass="buttonPanelElement"
+                                     ajax="true"
+                                     actionListener="#{adminBean.showProviders}"
+                                     process="@this"
+                                     update="@this">
+                    </h:commandButton>
+                    <h:commandButton title="Техподдержка"
+                                     value="Техподдержка"
+                                     styleClass="buttonPanelElement"
+                                     ajax="true"
+                                     actionListener="#{adminBean.showTechSupport}"
+                                     process="@this"
+                                     update="@this">
+                    </h:commandButton>
+                    <h:commandButton id="exitAccount"
+                                     styleClass="buttonPanelElement"
+                                     actionListener="#{userBean.exitAccount}"
+                                     value="Выход"/>
+                </h:form>
+            </p:outputPanel>
         </div>
         <div>
-            <div class="inline-block">
-                <h:panelGroup id="adminPanel">
-                    <h:panelGrid rendered="#{adminBean.enableEditUserPanel}">
-                        <ui:include src="editUser.xhtml"/>
-                    </h:panelGrid>
-                    <ui:include src="usersTable.xhtml"/>
-                </h:panelGroup>
-            </div>
+            <h:panelGrid id="supportPanel" styleClass="tablePage" rendered="#{adminBean.enableTechSupport}">
+                <ui:include src="adminSupport.xhtml"/>
+            </h:panelGrid>
+            <h:panelGrid id="adminPanel" styleClass="inline-block-admin" rendered="#{adminBean.enableProvidersPanel}">
+                <h:panelGrid rendered="#{adminBean.enableEditUserPanel}">
+                    <ui:include src="editUser.xhtml"/>
+                </h:panelGrid>
+                <ui:include src="usersTable.xhtml"/>
+            </h:panelGrid>
 
-            <div class="inline-block">
-                <h:panelGroup id="outletsPanel">
-                    <h:panelGrid rendered="#{adminBean.enableEditOutletPanel}">
-                        <ui:include src="editOutlet.xhtml"/>
-                    </h:panelGrid>
-                    <ui:include src="outletsTable.xhtml"/>
-                </h:panelGroup>
-            </div>
+            <h:panelGrid id="outletsPanel" styleClass="inline-block-admin" rendered="#{adminBean.enableProvidersPanel}">
+                <h:panelGrid rendered="#{adminBean.enableEditOutletPanel}">
+                    <ui:include src="editOutlet.xhtml"/>
+                </h:panelGrid>
+                <ui:include src="outletsTable.xhtml"/>
+            </h:panelGrid>
         </div>
     </div>
 

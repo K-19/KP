@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:form>
+            <div class="leftPanel">
+                <ui:include src="historyAnnounces.xhtml"/>
+            </div>
+            <div class="childMain">
+                <h:inputTextarea value="#{directorBean.newAnnounce}" styleClass="announceMessage"/>
+                <h:commandButton title="Отправить объявление"
+                                 value="Отправить объявление"
+                                 styleClass="buttonPanelElement"
+                                 style="text-align: center"
+                                 ajax="true"
+                                 actionListener="#{directorBean.sendNewAnnounce}"
+                                 process="@this"
+                                 update="@this">
+                </h:commandButton>
+            </div>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

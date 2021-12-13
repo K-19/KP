@@ -50,6 +50,7 @@ public class TechMessagesDao implements ObjectDao<TechMessage> {
         session.close();
     }
 
+    @SuppressWarnings("unchecked")
     public List<TechMessage> findAll() {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         List<TechMessage> list = (List<TechMessage>)session.createQuery("From TechMessage").list();
@@ -57,9 +58,26 @@ public class TechMessagesDao implements ObjectDao<TechMessage> {
         return list;
     }
 
+    @SuppressWarnings("unchecked")
     public List<TechMessage> findAllByUserId(long user_id) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         List<TechMessage> list = (List<TechMessage>)session.createQuery("From TechMessage WHERE user_id = " + user_id + " ORDER BY questionDate DESC").list();
+        session.close();
+        return list;
+    }
+
+    public List<TechMessage> findAllClosed() {
+        return findAllWithAnswer(false);
+    }
+
+    public List<TechMessage> findAllOpened() {
+        return findAllWithAnswer(true);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<TechMessage> findAllWithAnswer(boolean openedMessages) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        List<TechMessage> list = (List<TechMessage>)session.createQuery("From TechMessage WHERE answer IS " + (openedMessages ? "" : "NOT ") + "NULL ORDER BY questionDate DESC").list();
         session.close();
         return list;
     }

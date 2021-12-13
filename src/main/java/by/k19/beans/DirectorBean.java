@@ -8,10 +8,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @Named
@@ -23,6 +20,10 @@ public class DirectorBean implements Serializable {
     private Validator validator;
     @Inject
     private UserBean currentUser;
+    @Inject
+    private ManagerBean managerBean;
+    private String newAnnounce;
+    private Outlet statisticOutlet;
     private boolean enableEditProviderPanel;
     private boolean creatingProvider;
     private boolean updatingProvider;
@@ -30,7 +31,9 @@ public class DirectorBean implements Serializable {
     private boolean addingNewProduct;
     private boolean updatingProduct;
     private boolean enableTechSupport;
+    private boolean enableStatistics;
     private boolean enableProvidersPanel;
+    private boolean enableAnnounces;
     private ProductProvider currentProvider = new ProductProvider();
     private Product currentProduct = new Product();
     private Integer amountProduct;
@@ -48,6 +51,8 @@ public class DirectorBean implements Serializable {
         updatingProduct = false;
         enableTechSupport = false;
         enableProvidersPanel = false;
+        enableAnnounces = false;
+        enableStatistics = false;
     }
 
     public void showProviders() {
@@ -58,6 +63,16 @@ public class DirectorBean implements Serializable {
     public void showTechSupport() {
         closeAllPaged();
         enableTechSupport = true;
+    }
+
+    public void showAnnounces() {
+        closeAllPaged();
+        enableAnnounces = true;
+    }
+
+    public void showStatistics() {
+        closeAllPaged();
+        enableStatistics = true;
     }
 
     public ProductProvider getCurrentProvider() {
@@ -76,6 +91,7 @@ public class DirectorBean implements Serializable {
     public void createProvider() {
         if (validator.valid(currentProvider)) {
             db.save(currentProvider);
+            db.save(new UserAction(currentUser.getUser(), "Создан новый поставщик " + currentProvider));
             disableAddProductPanel();
             disableCreatePanel();
         }
@@ -96,6 +112,7 @@ public class DirectorBean implements Serializable {
     public void updateProvider() {
         if (validator.valid(currentProvider)) {
             db.update(currentProvider);
+            db.save(new UserAction(currentUser.getUser(), "Обновлён поставщик " + currentProvider));
             disableAddProductPanel();
             disableCreatePanel();
         }
@@ -126,6 +143,7 @@ public class DirectorBean implements Serializable {
             currentProvider.setProductMap(newMap);
             if (updatingProduct)
                 db.update(currentProvider);
+            db.save(new UserAction(currentUser.getUser(), "Обновлён поставщик " + currentProvider));
 //            if (creatingProvider) {
 //                Map<Product, Integer> newMap = new HashMap<>();
 //                for (Product product : currentProvider.getProductMap().keySet()) {
@@ -154,11 +172,13 @@ public class DirectorBean implements Serializable {
 
     public void deleteProvider(ProductProvider provider) {
         db.delete(provider);
+        db.save(new UserAction(currentUser.getUser(), "Удалён поставщик " + provider));
     }
 
     public void deleteProduct(Product product) {
         if (updatingProvider) {
             db.delete(product);
+            db.save(new UserAction(currentUser.getUser(), "Удалён продукт " + product));
         }
         currentProvider.getProductMap().remove(product);
     }
@@ -199,5 +219,27 @@ public class DirectorBean implements Serializable {
         if (currentProvider != null && currentProvider.getProductMap() != null)
             return new ArrayList<>(currentProvider.getProductMap().keySet());
         else return new ArrayList<>();
+    }
+
+    public List<UserAction> getAdminsActions() {
+        List<UserAction> resultList = new ArrayList<>();
+        for (UserAction action : db.findAll(UserAction.class)) {
+            if (action.getUser().getType() == UserType.ADMIN)
+                resultList.add(action);
+        }
+        resultList.sort(new Comparator<UserAction>() {
+            @Override
+            public int compare(UserAction o1, UserAction o2) {
+                return (int) (o2.getTime().getTime() - o1.getTime().getTime());
+            }
+        });
+        return resultList;
+    }
+
+    public void sendNewAnnounce() {
+        if (validator.valid(newAnnounce)) {
+            UserAction action = new UserAction(currentUser.getUser(), newAnnounce);
+            db.save(action);
+        }
     }
 }

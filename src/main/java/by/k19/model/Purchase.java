@@ -48,4 +48,11 @@ public class Purchase {
             result = result.substring(0, 30);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return  "Продукты: " + products +
+                ", Время: " + new SimpleDateFormat("dd.MM.yyyy hh:mm").format(time) +
+                ", Торговая точка: " + outlet;
+    }
 }

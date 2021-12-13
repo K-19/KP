@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:form>
+            <h:outputLabel value="Торговая точка"/>
+            <h:selectOneMenu value="#{directorBean.statisticOutlet}" styleClass="inputField">
+                <f:selectItems value="#{adminBean.allOutlets}"/>
+            </h:selectOneMenu>
+
+            <h:commandButton value="Показать статистику этого объекта"
+                             styleClass="buttonPanelElement"
+                             ajax="true"
+                             process="@this"
+                             update="@this">
+            </h:commandButton>
+
+            <ui:repeat value="#{managerBean.getFullStatistics(directorBean.statisticOutlet)}" var="stat">
+                <div style="width: 40%; height: 100%; font-size: 18px; float: left">
+                    <h:outputText value="#{stat}"/>
+                </div>
+                <div style="width: 60%; height: 100%; font-size: 18px; float: left; text-align: left">
+                    <h:outputText value="#{managerBean.getStatistic(stat)}"/>
+                </div>
+            </ui:repeat>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

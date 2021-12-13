@@ -11,7 +11,7 @@
             <h:commandButton title="Добавить товар на склад"
                              id="showCreateProductStoragePanelButton"
                              value="Добавить товар"
-                             rendered="#{!managerBean.enableEditProductPanelSS and managerBean.getAvailableProducts(false).size() ne 0}}"
+                             rendered="#{!managerBean.enableEditProductPanelSS and managerBean.getAvailableProducts(false).size() ne 0}"
                              ajax="true"
                              actionListener="#{managerBean.enableAddProductPanelSS}"
                              process="@this productPanelSS"

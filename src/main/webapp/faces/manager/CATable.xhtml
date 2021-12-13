@@ -7,7 +7,7 @@
 
             <h:commandButton title="Сделать запрос на склад"
                              value="Запрос на склад"
-                             rendered="#{!managerBean.enableQueryToMainStorage}"
+                             rendered="#{!managerBean.enableQueryToMainStorage and managerBean.newQueryList.size() ne 0}"
                              ajax="true"
                              actionListener="#{managerBean.startQueryToMainStorage}"
                              process="@this"

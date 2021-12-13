@@ -46,14 +46,10 @@ public class ProductRequest {
 
     @Override
     public String toString() {
-        return "ProductRequest{" +
-                "id=" + id +
-                ", productMap=" + productMap +
-                ", startTime=" + startTime +
-                ", acceptTime=" + acceptTime +
-                ", outlet=" + outlet.getId() +
-                ", user=" + user.getId() +
-                '}';
+        return  "Продукты: " + productMap +
+                ", Дата запроса: " + new SimpleDateFormat("dd.MM.yyyy").format(startTime) +
+                ", Дата доставки: " + (acceptTime == null ? "Не доставлено" : new SimpleDateFormat("dd.MM.yyyy").format(acceptTime)) +
+                ", Торговая точка: " + outlet;
     }
 
     @Transient

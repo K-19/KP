@@ -4,80 +4,82 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
    <p:outputPanel>
        <h:form>
-           <div class="inputElement">
-                 <h:outputLabel value="Название"/>
-                 <h:inputText id="regProductName" styleClass="inputField"
-                              value="#{directorBean.currentProduct.name}"/>
-           </div>
+           <h:panelGrid styleClass="inline-block" style="width: 100%">
+               <div class="inputElement">
+                     <h:outputLabel value="Название"/>
+                     <h:inputText id="regProductName" styleClass="inputField"
+                                  value="#{directorBean.currentProduct.name}"/>
+               </div>
 
-           <div class="inputElement">
-                 <h:outputLabel value="Тип продукта"/>
-                 <h:selectOneMenu value="#{directorBean.currentProduct.type}" styleClass="inputField">
-                    <f:selectItems value="#{databaseBean.productTypes}"/>
-                 </h:selectOneMenu>
-           </div>
+               <div class="inputElement">
+                     <h:outputLabel value="Тип продукта"/>
+                     <h:selectOneMenu value="#{directorBean.currentProduct.type}" styleClass="inputField">
+                        <f:selectItems value="#{databaseBean.productTypes}"/>
+                     </h:selectOneMenu>
+               </div>
 
-           <div class="inputElement">
-                 <h:outputLabel value="Цена закупки 1 шт"/>
-                 <h:inputText id="regPurchasePrice" styleClass="inputField"
-                              value="#{directorBean.currentProduct.purchasePrice}"/>
-           </div>
+               <div class="inputElement">
+                     <h:outputLabel value="Цена закупки 1 шт"/>
+                     <h:inputText id="regPurchasePrice" styleClass="inputField"
+                                  value="#{directorBean.currentProduct.purchasePrice}"/>
+               </div>
 
-           <div class="inputElement">
-                 <h:outputLabel value="Цена продажи"/>
-                 <h:inputText id="regSellingPrice" styleClass="inputField"
-                              value="#{directorBean.currentProduct.sellingPrice}"/>
-           </div>
+               <div class="inputElement">
+                     <h:outputLabel value="Цена продажи"/>
+                     <h:inputText id="regSellingPrice" styleClass="inputField"
+                                  value="#{directorBean.currentProduct.sellingPrice}"/>
+               </div>
 
-           <div class="inputElement">
-                 <h:outputLabel value="Дата изготовления (дд-ММ-гггг)"/>
-                 <h:inputText id="regManufDate" styleClass="inputField"
-                              value="#{directorBean.currentProduct.manufactureDate}">
-                    <f:convertDateTime pattern="dd-MM-yyyy"/>
-                 </h:inputText>
-           </div>
+               <div class="inputElement">
+                     <h:outputLabel value="Дата изготовления (дд-ММ-гггг)"/>
+                     <h:inputText id="regManufDate" styleClass="inputField"
+                                  value="#{directorBean.currentProduct.manufactureDate}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                     </h:inputText>
+               </div>
 
-           <div class="inputElement">
-                 <h:outputLabel value="Страна изготовитель"/>
-                 <h:selectOneMenu value="#{directorBean.currentProduct.manufacturerCountry}" styleClass="inputField">
-                    <f:selectItems value="#{databaseBean.countryTypes}"/>
-                 </h:selectOneMenu>
-           </div>
+               <div class="inputElement">
+                     <h:outputLabel value="Страна изготовитель"/>
+                     <h:selectOneMenu value="#{directorBean.currentProduct.manufacturerCountry}" styleClass="inputField">
+                        <f:selectItems value="#{databaseBean.countryTypes}"/>
+                     </h:selectOneMenu>
+               </div>
 
-           <div class="inputElement">
-                 <h:outputLabel value="Срок годности"/>
-                 <h:inputText id="regShelfLife" styleClass="inputField"
-                              value="#{directorBean.currentProduct.shelfLife}">
-                    <f:convertDateTime pattern="dd-MM-yyyy"/>
-                 </h:inputText>
-           </div>
+               <div class="inputElement">
+                     <h:outputLabel value="Срок годности"/>
+                     <h:inputText id="regShelfLife" styleClass="inputField"
+                                  value="#{directorBean.currentProduct.shelfLife}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                     </h:inputText>
+               </div>
 
-           <div class="inputElement">
-                 <h:outputLabel value="Количество (в месяц)"/>
-                 <h:inputText id="regAmount" styleClass="inputField"
-                              value="#{directorBean.amountProduct}"/>
-           </div>
+               <div class="inputElement">
+                     <h:outputLabel value="Количество (в месяц)"/>
+                     <h:inputText id="regAmount" styleClass="inputField"
+                                  value="#{directorBean.amountProduct}"/>
+               </div>
 
-           <div class="buttonPanel">
-                 <h:commandButton styleClass="buttonPanelElement"
-                                  id="productRegistration"
-                                  actionListener="#{directorBean.createProduct}"
-                                  value="Добавить продукт"
-                                  rendered="#{directorBean.addingNewProduct}"
-                                  process="@this showCreateProductPanelButton"/>
-                 <h:commandButton styleClass="buttonPanelElement"
-                                  id="productUpdating"
-                                  actionListener="#{directorBean.updateProduct}"
-                                  value="Обновить продукт"
-                                  rendered="#{directorBean.updatingProduct}"
-                                  process="@this showCreateProductPanelButton"/>
-                 <h:commandButton styleClass="buttonPanelElement"
-                                  id="cancelProductRegistration"
-                                  actionListener="#{directorBean.disableAddProductPanel}"
-                                  value="Отмена"
-                                  process="@this showCreateProductPanelButton"/>
-           </div>
-           <h:messages styleClass="errorMessage"/>
+               <div class="buttonPanel">
+                     <h:commandButton styleClass="buttonPanelElement"
+                                      id="productRegistration"
+                                      actionListener="#{directorBean.createProduct}"
+                                      value="Добавить продукт"
+                                      rendered="#{directorBean.addingNewProduct}"
+                                      process="@this showCreateProductPanelButton"/>
+                     <h:commandButton styleClass="buttonPanelElement"
+                                      id="productUpdating"
+                                      actionListener="#{directorBean.updateProduct}"
+                                      value="Обновить продукт"
+                                      rendered="#{directorBean.updatingProduct}"
+                                      process="@this showCreateProductPanelButton"/>
+                     <h:commandButton styleClass="buttonPanelElement"
+                                      id="cancelProductRegistration"
+                                      actionListener="#{directorBean.disableAddProductPanel}"
+                                      value="Отмена"
+                                      process="@this showCreateProductPanelButton"/>
+               </div>
+               <h:messages styleClass="errorMessage"/>
+           </h:panelGrid>
 
        </h:form>
    </p:outputPanel>

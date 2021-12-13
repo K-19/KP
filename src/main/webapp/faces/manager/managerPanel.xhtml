@@ -9,6 +9,7 @@
 <f:view>
     <h:head>
         <link type="text/css" rel="stylesheet" href="../../css/main.css"/>
+        <title>#{managerBean.currentUser.user.fio}</title>
     </h:head>
     <div class="main">
         <div class="topMenu-center">
@@ -70,6 +71,14 @@
                                      process="@this"
                                      update="@this">
                     </h:commandButton>
+                    <h:commandButton title="Открыть статистику торговой точки"
+                                     value="Статистика"
+                                     styleClass="buttonPanelElement"
+                                     ajax="true"
+                                     actionListener="#{managerBean.showStatistics}"
+                                     process="@this"
+                                     update="@this">
+                    </h:commandButton>
                     <h:commandButton title="Техподдержка"
                                      value="Техподдержка"
                                      styleClass="buttonPanelElement"
@@ -111,26 +120,22 @@
                 <h:panelGrid id="salesPanel" styleClass="tablePage" rendered="#{managerBean.enableSales}">
                     <ui:include src="salesTable.xhtml"/>
                 </h:panelGrid>
+                <h:panelGrid id="statisticPanel" styleClass="tablePage" rendered="#{managerBean.enableStatistics}">
+                    <ui:include src="../statistics/managerStatistics.xhtml"/>
+                </h:panelGrid>
                 <h:panelGrid id="supportPanel" styleClass="tablePage" rendered="#{managerBean.enableTechSupport}">
                     <ui:include src="../techSupport/supportPanel.xhtml"/>
                 </h:panelGrid>
-
-<!--                <div class="inline-block">-->
-<!--                    <h:panelGroup id="directorPanel">-->
-<!--                        <h:panelGrid id="createPanel" rendered="#{directorBean.enableEditProviderPanel}"-->
-<!--                        </h:panelGrid>-->
-<!--                        <h:panelGrid id="purchasesPanel" styleClass="tablePage" rendered="#{managerBean.enablePanelPurchases}">-->
-<!--                            <ui:include src="purchasesTable.xhtml"/>-->
-<!--                        </h:panelGrid> НАДО ДОПИСАТЬ ФРОНТ ДЛЯ ДЛЯ РАЗДЕЛА ПОКУПКИ!!!-->
-<!--                    </h:panelGroup>-->
-<!--                </div>-->
-                <h:panelGroup id="directorPanel2" styleClass="inline-block" rendered="#{directorBean.enableEditProviderPanel}">
-                    <ui:include src="createPurchaseTable.xhtml"/>
-                </h:panelGroup>
+                <h:panelGrid id="purchasesPanel" styleClass="tablePage" rendered="#{managerBean.enablePanelPurchases}">
+                    <ui:include src="purchasesTable.xhtml"/>
+                </h:panelGrid>
 
             </h:panelGroup>
 
         </div>
+    </div>
+    <div class="rightPanel">
+        <ui:include src="directorAnnounces.xhtml"/>
     </div>
 </f:view>
 </html>

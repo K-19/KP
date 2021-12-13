@@ -9,6 +9,7 @@
 <f:view>
     <h:head>
         <link type="text/css" rel="stylesheet" href="../../css/main.css"/>
+        <title>#{directorBean.currentUser.user.fio}</title>
     </h:head>
     <div class="main">
         <div class="topMenu-center">
@@ -19,6 +20,22 @@
                                      styleClass="buttonPanelElement"
                                      ajax="true"
                                      actionListener="#{directorBean.showProviders}"
+                                     process="@this"
+                                     update="@this">
+                    </h:commandButton>
+                    <h:commandButton title="Открыть панель объявлений"
+                                     value="Объявления"
+                                     styleClass="buttonPanelElement"
+                                     ajax="true"
+                                     actionListener="#{directorBean.showAnnounces}"
+                                     process="@this"
+                                     update="@this">
+                    </h:commandButton>
+                    <h:commandButton title="Открыть статистику"
+                                     value="Статистика"
+                                     styleClass="buttonPanelElement"
+                                     ajax="true"
+                                     actionListener="#{directorBean.showStatistics}"
                                      process="@this"
                                      update="@this">
                     </h:commandButton>
@@ -38,8 +55,14 @@
             </p:outputPanel>
         </div>
         <div>
+            <h:panelGrid id="announcePanel" styleClass="tablePage" rendered="#{directorBean.enableAnnounces}">
+                <ui:include src="announcesPanel.xhtml"/>
+            </h:panelGrid>
             <h:panelGrid id="supportPanel" styleClass="tablePage" rendered="#{directorBean.enableTechSupport}">
                 <ui:include src="../techSupport/supportPanel.xhtml"/>
+            </h:panelGrid>
+            <h:panelGrid id="sstatsPanel" styleClass="tablePage" rendered="#{directorBean.enableStatistics}">
+                <ui:include src="../statistics/directorsStatistics.xhtml"/>
             </h:panelGrid>
             <h:panelGrid rendered="#{directorBean.enableProvidersPanel}">
                 <div class="inline-block">
@@ -50,14 +73,11 @@
                         <ui:include src="providersTable.xhtml"/>
                     </h:panelGroup>
                 </div>
-                <h:panelGroup id="directorPanel2" styleClass="inline-block" rendered="#{directorBean.enableEditProviderPanel}">
-                    <h:panelGrid id="productPanel" rendered="#{directorBean.enableEditProductPanel}">
-                        <ui:include src="editProduct.xhtml"/>
-                    </h:panelGrid>
-                        <ui:include src="productsTable.xhtml"/>
-                </h:panelGroup>
             </h:panelGrid>
         </div>
+    </div>
+    <div class="rightPanel">
+        <ui:include src="adminActions.xhtml"/>
     </div>
 </f:view>
 </html>

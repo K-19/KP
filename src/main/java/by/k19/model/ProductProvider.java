@@ -49,13 +49,10 @@ public class ProductProvider {
 
     @Override
     public String toString() {
-        return "ProductProvider{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", country=" + country +
-                ", deliveryDays=" + deliveryDays +
-                ", productMap=" + productMap.keySet().stream().map(product -> product.getName() + " : " + productMap.get(product).toString()).collect(Collectors.joining("|")) +
-                '}';
+        return  name +
+                ", адрес: " + address +
+                ", " + country.getName() +
+                ", срок доставки: " + deliveryDays + " дн." +
+                ", Список товаров: " + productMap.keySet().stream().map(product -> product.getName() + " : " + productMap.get(product).toString()).collect(Collectors.joining("|"));
     }
 }

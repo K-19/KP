@@ -28,6 +28,7 @@ public class ManagerBean implements Serializable {
     private Purchase currentPurchase;
     private Sale currentSale;
     private Integer amountProduct;
+    private Map<String, String> statistics;
     private boolean enablePanelSA;
     private boolean enablePanelSS;
     private boolean enablePanelCS;
@@ -41,6 +42,7 @@ public class ManagerBean implements Serializable {
     private boolean enableQualityReportPanel;
     private boolean enableSales;
     private boolean enableTechSupport;
+    private boolean enableStatistics;
     private boolean addingNewProductSA;
     private boolean creatingProductToPurchase;
     private boolean addingNewProductToPurchase;
@@ -78,7 +80,7 @@ public class ManagerBean implements Serializable {
     public void saveQuery() {
         ProductRequest request = new ProductRequest(newQueryMap, new Date(), currentUser.getUser().getOutlet(), currentUser.getUser());
         db.save(request);
-        //TODO: open available requests table
+        db.save(new UserAction(currentUser.getUser(), "Создано запрос на склад " + request));
         closeAllTables();
     }
 
@@ -176,10 +178,12 @@ public class ManagerBean implements Serializable {
 
         request.setAcceptTime(new Date());
         db.update(request);
+        db.save(new UserAction(currentUser.getUser(), "Реализован запрос на склад " + request));
     }
 
     public void deleteRequest(ProductRequest request) {
         db.delete(request);
+        db.save(new UserAction(currentUser.getUser(), "Удалён запрос на склад " + request));
     }
 
     public void enableAddProductPanelSA() {
@@ -207,6 +211,7 @@ public class ManagerBean implements Serializable {
 
     public void showCreatePurchasePanel() {
         currentPurchase = new Purchase();
+        currentPurchase.setProducts(new HashMap<>());
         enableCreatePurchasePanel = true;
     }
 
@@ -221,6 +226,9 @@ public class ManagerBean implements Serializable {
         enableQualityReportPanel = false;
         enableSales = false;
         enableTechSupport = false;
+        enableStatistics = false;
+        enableCreatePurchasePanel = false;
+        enableEditProductPanelSS = false;
     }
 
     public void showPanelSA() {
@@ -258,6 +266,11 @@ public class ManagerBean implements Serializable {
         enableSales = true;
     }
 
+    public void showStatistics() {
+        closeAllTables();
+        enableStatistics = true;
+    }
+
     public void showTechSupport() {
         closeAllTables();
         enableTechSupport = true;
@@ -271,6 +284,7 @@ public class ManagerBean implements Serializable {
     public void deleteProductSA(Product product) {
         getSA().remove(product);
         db.update(currentUser.getUser().getOutlet());
+        db.save(new UserAction(currentUser.getUser(), "Из стандартного ассортимента удалён продукт " + product));
     }
 
     public void deleteProductPurchase(Product product) {
@@ -279,11 +293,13 @@ public class ManagerBean implements Serializable {
 
     public void deleteProductSS(Product product) {
         getSS().remove(product);
+        db.save(new UserAction(currentUser.getUser(), "Из стандартного склада удалн продукт " + product));
         db.update(currentUser.getUser().getOutlet());
     }
 
     public void deleteSale(Sale sale) {
         db.delete(sale);
+        db.save(new UserAction(currentUser.getUser(), "Удалена скидка  " + sale));
     }
 
     public void startUpdateProductPurchase(Product product, Integer amount) {
@@ -307,6 +323,7 @@ public class ManagerBean implements Serializable {
         enableEditProductPanelSS = true;
         updatingProductSS = true;
     }
+    //TODO: исправить фронт покупки
 
     public void disableAddProductPanelSA() {
         currentProduct = null;
@@ -344,6 +361,7 @@ public class ManagerBean implements Serializable {
         if (validator.valid(currentProduct)) {
             getSA().put(currentProduct, amountProduct);
             db.update(currentUser.getUser().getOutlet());
+            db.save(new UserAction(currentUser.getUser(), "Создан продукт в стандартном ассортименте " + currentProduct));
             disableAddProductPanelSA();
         }
     }
@@ -364,6 +382,7 @@ public class ManagerBean implements Serializable {
         if (validator.valid(currentProduct)) {
             getSS().put(currentProduct, amountProduct);
             db.update(currentUser.getUser().getOutlet());
+            db.save(new UserAction(currentUser.getUser(), "Создан продукт в стандартном складе " + currentProduct));
             disableAddProductPanelSS();
         }
     }
@@ -378,6 +397,7 @@ public class ManagerBean implements Serializable {
             }
             currentUser.getUser().getOutlet().setStandardAssortment(newSA);
             db.update(currentUser.getUser().getOutlet());
+            db.save(new UserAction(currentUser.getUser(), "Обновлён продукт в стандартном ассортименте " + currentProduct));
             disableAddProductPanelSA();
         }
     }
@@ -386,6 +406,7 @@ public class ManagerBean implements Serializable {
         currentSale.setOutlet(currentUser.getUser().getOutlet());
         if (validator.valid(currentSale)) {
             db.save(currentSale);
+            db.save(new UserAction(currentUser.getUser(), "Создана скидка " + currentSale));
             disableSaleCreating();
         }
     }
@@ -425,6 +446,7 @@ public class ManagerBean implements Serializable {
             }
             db.update(currentUser.getUser().getOutlet());
             db.save(currentPurchase);
+            db.save(new UserAction(currentUser.getUser(), "Оформлена покупка " + currentPurchase));
             disableAddProductPanelPurchase();
             disableCreatePanel();
         }
@@ -432,7 +454,7 @@ public class ManagerBean implements Serializable {
 
     public void disableCreatePanel() {
         currentPurchase = null;
-        enablePanelPurchases = false;
+        enableCreatePurchasePanel = false;
     }
 
     public void updateProductSS() {
@@ -445,6 +467,7 @@ public class ManagerBean implements Serializable {
             }
             currentUser.getUser().getOutlet().setStandardStorage(newSS);
             db.update(currentUser.getUser().getOutlet());
+            db.save(new UserAction(currentUser.getUser(), "Обновлён продукт в стандартном складе " + currentProduct));
             disableAddProductPanelSS();
         }
     }
@@ -580,6 +603,133 @@ public class ManagerBean implements Serializable {
             getCA().remove(product);
             getCS().remove(product);
             db.update(currentUser.getUser().getOutlet());
+            db.save(new UserAction(currentUser.getUser(), "Утилизирован продукт " + product));
         }
+    }
+
+    public List<UserAction> getAnnounces() {
+        List<UserAction> resultList = new ArrayList<>();
+        for (UserAction action : db.findAll(UserAction.class)) {
+            if (action.getUser().getType() == UserType.DIRECTOR)
+                resultList.add(action);
+        }
+        resultList.sort(new Comparator<UserAction>() {
+            @Override
+            public int compare(UserAction o1, UserAction o2) {
+                return (int) (o2.getTime().getTime() - o1.getTime().getTime());
+            }
+        });
+        return resultList;
+    }
+
+    public String getStatistic(String stat) {
+        return statistics.get(stat);
+    }
+
+    public List<String> getMyStatistics() {
+        return getFullStatistics(currentUser.getUser().getOutlet());
+    }
+
+    public List<String> getFullStatistics(Outlet outlet) {
+        if (outlet == null)
+            return new ArrayList<>();
+        statistics = new HashMap<>();
+
+        //Товаров в ассортименете
+        statistics.put("Товаров в ассортименете", outlet.getStandardAssortment().keySet().size() + " видов");
+
+        //Количество товаров в ассортименте на данный момент
+        int sum1 = 0;
+        for (Product product : outlet.getCurrentAssortment().keySet()) {
+            sum1 += outlet.getCurrentAssortment().get(product);
+        }
+        statistics.put("Количество товаров в ассортименте на данный момент", sum1 + " шт.");
+
+        //Количество товаров в ассортименте стандартно
+        int sum2 = 0;
+        for (Product product : outlet.getStandardAssortment().keySet()) {
+            sum2 += outlet.getStandardAssortment().get(product);
+        }
+        statistics.put("Количество товаров в ассортименте стандартно", sum2 + " шт.");
+
+        //Товаров на складе
+        statistics.put("Товаров на складе", outlet.getStandardStorage().keySet().size() + " видов");
+
+        //Количество товаров на складе на данный момент
+        int sum3 = 0;
+        for (Product product : outlet.getCurrentStorage().keySet()) {
+            sum3 += outlet.getCurrentStorage().get(product);
+        }
+        statistics.put("Количество товаров на складе на данный момент", sum3 + " шт.");
+
+
+        //КОличество товаров на складе стандартно
+        int sum4 = 0;
+        for (Product product : outlet.getStandardStorage().keySet()) {
+            sum4 += outlet.getStandardStorage().get(product);
+        }
+        statistics.put("Количество товаров на складе на данный момент", sum4 + " шт.");
+
+        List<ProductRequest> requests = ((ProductRequestDao)db.getDao(ProductRequest.class)).findAllByOutletId(outlet.getId());
+
+        //Количество запросов
+        statistics.put("Количество запросов", Integer.toString(requests.size()));
+
+        //Количество удовлетворенных запросов
+        Integer sum5 = 0;
+        for (ProductRequest request : requests) {
+            if (request.getAcceptTime() != null)
+                sum5++;
+        }
+        statistics.put("Количество удовлетворенных запросов", sum5.toString());
+
+        List<Sale> sales = ((SalesDao)db.getDao(Sale.class)).findFromOutletById(outlet.getId());
+
+        //Скидок активно
+        statistics.put("Скидок активно", Integer.toString(sales.size()));
+
+        //Средний процент скидки
+        double avrPercent = 0;
+        for (Sale sale : sales) {
+            avrPercent += sale.getPercent();
+        }
+        avrPercent /= sales.size();
+        statistics.put("Средний процент скидки", Double.toString(avrPercent));
+
+
+        //Средняя скидка на всю продукцию
+        double avrAllPercent = 0;
+        for (Sale sale : sales) {
+            avrPercent += sale.getPercent();
+        }
+        avrPercent /= outlet.getStandardAssortment().size();
+        statistics.put("Средняя скидка на всю продукцию", Double.toString(avrAllPercent));
+
+        // Количество покупок
+        Integer sumSellProds = 0;
+        for (Purchase purchase : ((PurchasesDao)db.getDao(Purchase.class)).findAllByOutletId(outlet.getId())) {
+            for (Product product : purchase.getProducts().keySet()) {
+                sumSellProds += purchase.getProducts().get(product);
+            }
+        }
+        statistics.put("Количество проданных товаров", sumSellProds.toString());
+
+        //Количество завезённых продуктов со склада
+        Integer amountProdsFromStorage = 0;
+        for (ProductRequest request : ((ProductRequestDao)db.getDao(ProductRequest.class)).findAllByOutletId(outlet.getId())) {
+            for (Product product : request.getProductMap().keySet()) {
+                amountProdsFromStorage += request.getProductMap().get(product);
+            }
+        }
+        statistics.put("Количество завезённых со склада товаров", amountProdsFromStorage.toString());
+        return new ArrayList<>(statistics.keySet());
+    }
+
+    public List<Product> getAvailableToPurchaseProducts() {
+        List<Product> result = new ArrayList<>(getCA().keySet());
+        for (Product product : currentPurchase.getProducts().keySet()) {
+            result.remove(product);
+        }
+        return result;
     }
 }

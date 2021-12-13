@@ -5,51 +5,60 @@
     <p:outputPanel>
         <h:form id="registrationForm">
 
-            <div class="inputElement">
-                <h:outputLabel value="Название"/>
-                <h:inputText id="regProviderName" styleClass="inputField"
-                             value="#{directorBean.currentProvider.name}"/>
-            </div>
+            <h:panelGrid styleClass="inline-block">
+                <div class="inputElement">
+                    <h:outputLabel value="Название"/>
+                    <h:inputText id="regProviderName" styleClass="inputField"
+                                 value="#{directorBean.currentProvider.name}"/>
+                </div>
 
-            <div class="inputElement">
-                <h:outputLabel value="Страна"/>
-                <h:selectOneMenu value="#{directorBean.currentProvider.country}" styleClass="inputField">
-                    <f:selectItems value="#{databaseBean.countryTypes}"/>
-                </h:selectOneMenu>
-            </div>
+                <div class="inputElement">
+                    <h:outputLabel value="Страна"/>
+                    <h:selectOneMenu value="#{directorBean.currentProvider.country}" styleClass="inputField">
+                        <f:selectItems value="#{databaseBean.countryTypes}"/>
+                    </h:selectOneMenu>
+                </div>
 
-            <div class="inputElement">
-                <h:outputLabel value="Адрес"/>
-                <h:inputText id="regAddress" styleClass="inputField"
-                             value="#{directorBean.currentProvider.address}"/>
-            </div>
+                <div class="inputElement">
+                    <h:outputLabel value="Адрес"/>
+                    <h:inputText id="regAddress" styleClass="inputField"
+                                 value="#{directorBean.currentProvider.address}"/>
+                </div>
 
-            <div class="inputElement">
-                <h:outputLabel value="Среднее время поставок (дней)"/>
-                <h:inputText id="regDeliveryDays" styleClass="inputField"
-                             value="#{directorBean.currentProvider.deliveryDays}"/>
-                <h:messages style = "color:red;margin:8px;" />
-            </div>
+                <div class="inputElement">
+                    <h:outputLabel value="Среднее время поставок (дней)"/>
+                    <h:inputText id="regDeliveryDays" styleClass="inputField"
+                                 value="#{directorBean.currentProvider.deliveryDays}"/>
+                    <h:messages style = "color:red;margin:8px;" />
+                </div>
 
-            <div class="buttonPanel">
-                <h:commandButton styleClass="buttonPanelElement"
-                                 id="providerRegistration"
-                                 actionListener="#{directorBean.createProvider()}"
-                                 value="Зарегистрировать поставщика"
-                                 rendered="#{directorBean.creatingProvider}"
-                                 process="@this showCreateProviderPanelButton"/>
-                <h:commandButton styleClass="buttonPanelElement"
-                                 id="providerUpdate"
-                                 actionListener="#{directorBean.updateProvider()}"
-                                 value="Обновить поставщика"
-                                 rendered="#{directorBean.updatingProvider}"
-                                 process="@this"/>
-                <h:commandButton styleClass="buttonPanelElement"
-                                 id="cancelRegistration"
-                                 actionListener="#{directorBean.disableCreatePanel}"
-                                 value="Отмена"
-                                 process="@this showCreateProviderPanelButton"/>
-            </div>
+                <div class="buttonPanel">
+                    <h:commandButton styleClass="buttonPanelElement"
+                                     id="providerRegistration"
+                                     actionListener="#{directorBean.createProvider()}"
+                                     value="Зарегистрировать поставщика"
+                                     rendered="#{directorBean.creatingProvider}"
+                                     process="@this showCreateProviderPanelButton"/>
+                    <h:commandButton styleClass="buttonPanelElement"
+                                     id="providerUpdate"
+                                     actionListener="#{directorBean.updateProvider()}"
+                                     value="Обновить поставщика"
+                                     rendered="#{directorBean.updatingProvider}"
+                                     process="@this"/>
+                    <h:commandButton styleClass="buttonPanelElement"
+                                     id="cancelRegistration"
+                                     actionListener="#{directorBean.disableCreatePanel}"
+                                     value="Отмена"
+                                     process="@this showCreateProviderPanelButton"/>
+                </div>
+            </h:panelGrid>
+
+            <h:panelGroup id="directorPanel2" styleClass="inline-block" rendered="#{directorBean.enableEditProviderPanel}">
+                <h:panelGrid id="productPanel" rendered="#{directorBean.enableEditProductPanel}" style="width: 100%">
+                    <ui:include src="editProduct.xhtml"/>
+                </h:panelGrid>
+                <ui:include src="productsTable.xhtml"/>
+            </h:panelGroup>
 
             <h:messages styleClass="errorMessage"/>
 

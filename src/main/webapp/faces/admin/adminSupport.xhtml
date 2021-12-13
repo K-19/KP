@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+    <p:outputPanel>
+        <h:form>
+            <h1>Техническая поддержка пользователей</h1>
+
+            <h:panelGrid rendered="#{adminBean.openedTechMessages.size() ne 0}" style="width: 100%">
+                <h:inputTextarea value="#{adminBean.currentTechSupportAnswer}" styleClass="answerTextArea"/>
+
+                <h:dataTable id="openedTable"
+                             var="openMessage"
+                             rowKey="#{openMessage.id}"
+                             value="#{adminBean.openedTechMessages}"
+                             rowIndexVar="rowNum"
+                             emptyMessage="..."
+                             styleClass="infoTable"
+                             selectionMode="single">
+                    <h:column>
+                        <f:facet name="header">№</f:facet>
+                        <h:outputText value="#{rowNum + 1}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Сообщение</f:facet>
+                        <h:outputText value="#{openMessage.userString}"/>
+                        <br/>
+                        <h:outputText value="#{openMessage.questionDateString}"/>
+                        <br/>
+                        <h:outputText value="#{openMessage.question}"/>
+                    </h:column>
+                    <h:column>
+                        <h:commandButton title="Отправить ответ пользователю"
+                                         value="Ответить"
+                                         ajax="true"
+                                         actionListener="#{adminBean.answerMessage(openMessage)}"
+                                         process="openedTable supportTable"
+                                         update="openedTable supportTable">
+                        </h:commandButton>
+                    </h:column>
+                </h:dataTable>
+            </h:panelGrid>
+
+
+            <h:dataTable id="supportTable"
+                         var="message"
+                         rowKey="#{message.id}"
+                         value="#{adminBean.supportHistory}"
+                         rowIndexVar="rowNum"
+                         emptyMessage="..."
+                         styleClass="infoTable"
+                         selectionMode="single">
+                <h:column>
+                    <f:facet name="header">№</f:facet>
+                    <h:outputText value="#{rowNum + 1}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Пользователь</f:facet>
+                    <h:outputText value="#{message.userString}"/>
+                    <br/>
+                    <h:outputText value="#{message.questionDateString}"/>
+                    <br/>
+                    <h:outputText value="#{message.question}"/>
+                </h:column>
+                <h:column >
+                    <f:facet name="header">Ответ администрации</f:facet>
+                    <h:outputText value="#{message.adminString}"/>
+                    <br/>
+                    <h:outputText value="#{message.answerDateString}"/>
+                    <br/>
+                    <h:outputText value="#{message.answer}"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </p:outputPanel>
+</ui:composition>

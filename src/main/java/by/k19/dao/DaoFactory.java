@@ -28,6 +28,8 @@ public class DaoFactory {
             return SalesDao.getInstance();
         }  else if (clazz.equals(TechMessage.class)) {
             return TechMessagesDao.getInstance();
+        }  else if (clazz.equals(UserAction.class)) {
+            return ActionDao.getInstance();
         }
         else throw new IllegalArgumentException();
     }
@@ -53,6 +55,8 @@ public class DaoFactory {
             return SalesDao.getInstance();
         } else if (obj instanceof TechMessage) {
             return TechMessagesDao.getInstance();
+        } else if (obj instanceof UserAction) {
+            return ActionDao.getInstance();
         }
         else throw new IllegalArgumentException();
     }

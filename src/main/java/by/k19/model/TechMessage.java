@@ -39,6 +39,10 @@ public class TechMessage {
         return "Вопрос №" + id;
     }
 
+    public String getUserString() {
+        return getIdString() + " от " + (user.getType() == UserType.DIRECTOR ? " директора " : " менеджера " + user.getOutlet().getName() + " ") + user.getFio();
+    }
+
     public String getQuestionDateString() {
         return new SimpleDateFormat("dd.MM.yyyy hh:mm").format(questionDate);
     }

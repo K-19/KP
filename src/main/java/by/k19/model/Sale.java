@@ -28,4 +28,11 @@ public class Sale {
     public String getPercentString() {
         return percent + "%";
     }
+
+    @Override
+    public String toString() {
+        return  "Продукт:" + product +
+                ", Торговая точка: " + outlet +
+                ", Процент: " + percent + "%";
+    }
 }

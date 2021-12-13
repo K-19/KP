@@ -3,6 +3,7 @@ package by.k19.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
@@ -53,5 +54,15 @@ public class User {
             return "-/-/-";
         }
         return outlet.toString();
+    }
+
+    @Override
+    public String toString() {
+        return getFio() +
+                ", логин: " + login +
+                ", пароль: " + password +
+                ", тип: " + type.getName() +
+                ", дата рождения:" + new SimpleDateFormat("dd.MM.yyyy").format(birthday) +
+                (outlet != null ? ", торговая точка: " + outlet : "");
     }
 }

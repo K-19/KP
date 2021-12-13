@@ -4,7 +4,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
     <p:outputPanel>
         <h:form>
-            <h:panelGrid id="createPurchasePanel" styleClass="tablePage" rendered="#{managerBean.enableCreatePurchasePanel}">
+            <h:panelGrid rendered="#{managerBean.enableCreatePurchasePanel}">
                 <ui:include src="createPurchaseTable.xhtml"/>
             </h:panelGrid>
 

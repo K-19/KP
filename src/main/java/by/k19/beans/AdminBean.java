@@ -1,18 +1,15 @@
 package by.k19.beans;
 
-import by.k19.dao.DaoFactory;
+import by.k19.dao.TechMessagesDao;
 import by.k19.dao.UserDao;
-import by.k19.model.Country;
-import by.k19.model.Outlet;
-import by.k19.model.User;
-import by.k19.model.UserType;
+import by.k19.model.*;
 import lombok.Data;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,12 +23,15 @@ public class AdminBean implements Serializable {
     private Validator validator;
     @Inject
     private UserBean currentAdmin;
+    private String currentTechSupportAnswer;
     private boolean creatingNewUser;
     private boolean updatingUser;
     private boolean enableEditUserPanel;
     private boolean creatingNewOutlet;
     private boolean updatingOutlet;
     private boolean enableEditOutletPanel;
+    private boolean enableTechSupport;
+    private boolean enableProvidersPanel;
     private User manipulatedUser = new User();
     private Outlet manipulatedOutlet = new Outlet();
     private String stringCreatedUserPassword;
@@ -48,6 +48,27 @@ public class AdminBean implements Serializable {
         if (outlet == null || outlet.getUserList() == null)
             return "Отсутствуют";
         return outlet.getUserList().stream().map(User::getSurname).collect(Collectors.joining(", "));
+    }
+
+    public void showProviders() {
+        closeAllPaged();
+        enableProvidersPanel = true;
+    }
+
+    public void showTechSupport() {
+        closeAllPaged();
+        enableTechSupport = true;
+    }
+
+    public void closeAllPaged() {
+        creatingNewUser = false;
+        updatingUser = false;
+        enableEditUserPanel = false;
+        creatingNewOutlet = false;
+        updatingOutlet = false;
+        enableEditOutletPanel = false;
+        enableTechSupport = false;
+        enableProvidersPanel = false;
     }
 
     public void enableCreateUserPanel() {
@@ -89,6 +110,7 @@ public class AdminBean implements Serializable {
             if (manipulatedUser.getType() != UserType.MANAGER)
                 manipulatedUser.setOutlet(null);
             db.save(manipulatedUser);
+            db.save(new UserAction(currentAdmin.getUser(), "Создан новый пользователь " + manipulatedUser));
             closeEditUserPanel();
         }
     }
@@ -100,6 +122,7 @@ public class AdminBean implements Serializable {
             db.update(manipulatedUser);
             if (manipulatedUser.getType() == UserType.MANAGER)
                 manipulatedUser.getOutlet().getUserList().add(manipulatedUser);
+            db.save(new UserAction(currentAdmin.getUser(), "Обновлён пользователь " + manipulatedUser));
             closeEditUserPanel();
         }
     }
@@ -107,6 +130,7 @@ public class AdminBean implements Serializable {
     public void createOutlet() {
         if (validator.valid(manipulatedOutlet)) {
             db.save(manipulatedOutlet);
+            db.save(new UserAction(currentAdmin.getUser(), "Создана новая торговая точка " + manipulatedOutlet));
             closeEditOutletPanel();
             CashDataBean.initialCash();
         }
@@ -115,6 +139,7 @@ public class AdminBean implements Serializable {
     public void updateOutlet() {
         if (validator.valid(manipulatedOutlet)) {
             db.update(manipulatedOutlet);
+            db.save(new UserAction(currentAdmin.getUser(), "Обновлена торговая точка " + manipulatedOutlet));
             closeEditOutletPanel();
         }
     }
@@ -133,6 +158,7 @@ public class AdminBean implements Serializable {
 
     public void deleteUser(User user) {
         db.delete(user);
+        db.save(new UserAction(currentAdmin.getUser(), "Удалён пользователь " + user));
     }
 
     public void deleteOutlet(Outlet outlet) {
@@ -142,11 +168,29 @@ public class AdminBean implements Serializable {
         }
         outlet.setUserList(null);
         db.delete(outlet);
+        db.save(new UserAction(currentAdmin.getUser(), "Удалена торговая точка " + outlet));
     }
 
     private boolean userIsExist(User user) {
         return ((UserDao)db.getDao(User.class)).isExist(user);
     }
 
+    public List<TechMessage> getSupportHistory() {
+        return ((TechMessagesDao) db.getDao(TechMessage.class)).findAllClosed();
+    }
 
+    public List<TechMessage> getOpenedTechMessages() {
+        return ((TechMessagesDao) db.getDao(TechMessage.class)).findAllOpened();
+    }
+
+    public void answerMessage(TechMessage message) {
+        if (validator.valid(currentTechSupportAnswer)) {
+            message.setAnswer(currentTechSupportAnswer);
+            currentTechSupportAnswer = "";
+            message.setAdmin(currentAdmin.getUser());
+            message.setAnswerDate(new Date());
+            db.update(message);
+            db.save(new UserAction(currentAdmin.getUser(), "Ответ на вопрос пользователя " + message.getUser().getFio() + ": " + message.getQuestion() + " -> " + message.getAnswer()));
+        }
+    }
 }
