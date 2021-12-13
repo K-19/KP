@@ -22,6 +22,8 @@ public class DirectorBean implements Serializable {
     private UserBean currentUser;
     @Inject
     private ManagerBean managerBean;
+    @Inject
+    private ErrorBean errorBean;
     private String newAnnounce;
     private Outlet statisticOutlet;
     private boolean enableEditProviderPanel;
@@ -95,6 +97,9 @@ public class DirectorBean implements Serializable {
             disableAddProductPanel();
             disableCreatePanel();
         }
+        else {
+            errorBean.setMessage("Ошибка! Проверьте правильность ввода данных");
+        }
     }
 
     public void startUpdateProvider(ProductProvider provider) {
@@ -144,18 +149,6 @@ public class DirectorBean implements Serializable {
             if (updatingProduct)
                 db.update(currentProvider);
             db.save(new UserAction(currentUser.getUser(), "Обновлён поставщик " + currentProvider));
-//            if (creatingProvider) {
-//                Map<Product, Integer> newMap = new HashMap<>();
-//                for (Product product : currentProvider.getProductMap().keySet()) {
-//                    if (product.getId() == currentProduct.getId())
-//                        newMap.put(currentProduct, amountProduct);
-//                    else newMap.put(product, currentProvider.getProductMap().get(product));
-//                }
-//                currentProvider.setProductMap(newMap);
-//            }
-//            else {
-//                db.update(currentProduct);
-//            }
             disableAddProductPanel();
         }
     }
@@ -240,6 +233,8 @@ public class DirectorBean implements Serializable {
         if (validator.valid(newAnnounce)) {
             UserAction action = new UserAction(currentUser.getUser(), newAnnounce);
             db.save(action);
+        } else {
+            errorBean.setMessage("Ошибка! Нельзя отправить пустое объявление");
         }
     }
 }

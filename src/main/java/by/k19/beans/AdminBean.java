@@ -23,6 +23,8 @@ public class AdminBean implements Serializable {
     private Validator validator;
     @Inject
     private UserBean currentAdmin;
+    @Inject
+    private ErrorBean errorBean;
     private String currentTechSupportAnswer;
     private boolean creatingNewUser;
     private boolean updatingUser;
@@ -106,7 +108,10 @@ public class AdminBean implements Serializable {
 
     public void createUser() {
         manipulatedUser.setPassword(stringCreatedUserPassword.hashCode());
-        if (validator.valid(manipulatedUser) && !userIsExist(manipulatedUser)) {
+        if (manipulatedUser.getType() == UserType.MANAGER && manipulatedUser.getOutlet() == null) {
+            errorBean.setMessage("Ошибка! Менеджеру должна быть указана торговая точка");
+        }
+        else if (validator.valid(manipulatedUser) && !userIsExist(manipulatedUser)) {
             if (manipulatedUser.getType() != UserType.MANAGER)
                 manipulatedUser.setOutlet(null);
             db.save(manipulatedUser);
@@ -191,6 +196,9 @@ public class AdminBean implements Serializable {
             message.setAnswerDate(new Date());
             db.update(message);
             db.save(new UserAction(currentAdmin.getUser(), "Ответ на вопрос пользователя " + message.getUser().getFio() + ": " + message.getQuestion() + " -> " + message.getAnswer()));
+        }
+        else {
+            errorBean.setMessage("Ошибка! Невозможно отправить пустой сообщение");
         }
     }
 }

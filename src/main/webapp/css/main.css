@@ -168,6 +168,10 @@ input[type=submit]:hover {
     margin: 8px;
 }
 
+.error {
+    color: red;
+}
+
 .tablePage {
     padding: 30px;
     width: 100%;

@@ -51,6 +51,7 @@
                                      value="Отмена"
                                      process="@this showCreateProviderPanelButton"/>
                 </div>
+                <h:outputText value="#{errorBean.message}"/>
             </h:panelGrid>
 
             <h:panelGroup id="directorPanel2" styleClass="inline-block" rendered="#{directorBean.enableEditProviderPanel}">

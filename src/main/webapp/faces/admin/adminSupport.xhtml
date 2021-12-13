@@ -9,6 +9,8 @@
             <h:panelGrid rendered="#{adminBean.openedTechMessages.size() ne 0}" style="width: 100%">
                 <h:inputTextarea value="#{adminBean.currentTechSupportAnswer}" styleClass="answerTextArea"/>
 
+                <h:outputText value="#{errorBean.message}"/>
+
                 <h:dataTable id="openedTable"
                              var="openMessage"
                              rowKey="#{openMessage.id}"

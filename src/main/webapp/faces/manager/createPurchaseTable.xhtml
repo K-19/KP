@@ -20,6 +20,7 @@
             </h:commandButton>
             <h:commandButton id="purchaseRegistration" styleClass="buttonPanelElement" actionListener="#{managerBean.createPurchase()}" value="Оформить покупку" process="@this showCreateProductPurchasePanelButton"/>
             <h:commandButton id="cancelPurchaseRegistration" styleClass="buttonPanelElement" actionListener="#{managerBean.disableCreatePanel}" value="Отменить оформление покупки" process="@this showCreateProductPurchasePanelButton"/>
+            <h:outputText value="#{errorBean.message}"/>
 
             <h1>Список товаров текущей покупки</h1>
             <h:dataTable id="productsPurchaseTable"

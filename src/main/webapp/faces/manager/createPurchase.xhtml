@@ -28,6 +28,7 @@
             <h:commandButton id="productUpdating" styleClass="buttonPanelElement" actionListener="#{managerBean.updateProductPurchase}" value="Обновить продукт" rendered="#{managerBean.updatingProductPurchase}" process="@this showCreatePurchasePanelButton"/>
             <h:commandButton id="cancelProductRegistration" styleClass="buttonPanelElement" actionListener="#{managerBean.disableAddProductPanelPurchase}" value="Отменить добавление товара" process="@this showCreatePurchasePanelButton"/>
         </div>
+        <h:outputText value="#{errorBean.message}"/>
 
     </p:outputPanel>
 </ui:composition>

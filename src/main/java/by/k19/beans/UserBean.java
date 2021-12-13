@@ -27,6 +27,8 @@ public class UserBean implements Serializable {
     private DatabaseBean db;
     @Inject
     private Validator validator;
+    @Inject
+    private ErrorBean errorBean;
 
     private User user;
     private String login;
@@ -60,6 +62,12 @@ public class UserBean implements Serializable {
                     CashDataBean.initialCash();
                     context.getExternalContext().redirect(redirectUrl);
                 }
+                else {
+                    errorBean.setMessage("Ошибка! Логин или пароль неправильны");
+                }
+            }
+            else {
+                errorBean.setMessage("Ошибка! Поля должны быть обязательно заполнены");
             }
         } catch (IOException e) {
             context.addMessage(null ,
@@ -98,6 +106,9 @@ public class UserBean implements Serializable {
             newMessage.setQuestionDate(new Date());
             newMessage.setQuestion(techSupportQuestion);
             db.save(newMessage);
+        }
+        else {
+            errorBean.setMessage("Ошибка! Нельзя отправить пустое сообщение");
         }
     }
 }

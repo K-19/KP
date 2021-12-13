@@ -17,6 +17,7 @@
                              process="@this"
                              update="@this">
             </h:commandButton>
+            <h:outputText value="#{errorBean.message}"/>
             <h3>История сообщений</h3>
             <h:dataTable id="messagesTable"
                          var="message"

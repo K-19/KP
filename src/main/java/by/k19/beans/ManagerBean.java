@@ -23,7 +23,8 @@ public class ManagerBean implements Serializable {
     private Validator validator;
     @Inject
     private UserBean currentUser;
-
+    @Inject
+    private ErrorBean errorBean;
     private Product currentProduct;
     private Purchase currentPurchase;
     private Sale currentSale;
@@ -323,7 +324,6 @@ public class ManagerBean implements Serializable {
         enableEditProductPanelSS = true;
         updatingProductSS = true;
     }
-    //TODO: исправить фронт покупки
 
     public void disableAddProductPanelSA() {
         currentProduct = null;
@@ -364,6 +364,9 @@ public class ManagerBean implements Serializable {
             db.save(new UserAction(currentUser.getUser(), "Создан продукт в стандартном ассортименте " + currentProduct));
             disableAddProductPanelSA();
         }
+        else {
+            errorBean.setMessage("Ошибка! Проверьте корректность данных");
+        }
     }
 
     public void createProductPurchase() {
@@ -373,6 +376,9 @@ public class ManagerBean implements Serializable {
             currentPurchase.getProducts().put(currentProduct, amountProduct);
 //            db.update(currentUser.getUser().getOutlet());
             disableAddProductPanelPurchase();
+        }
+        else {
+            errorBean.setMessage("Ошибка! Проверьте правильность вводимых данных");
         }
     }
 
@@ -426,6 +432,10 @@ public class ManagerBean implements Serializable {
 
     public void createPurchase() {
         if (validator.valid(currentPurchase)) {
+            if (currentPurchase.getProducts().size() == 0) {
+                errorBean.setMessage("Ошибка! Невозможно оформить покупку с пустым количеством товаров");
+                return;
+            }
             currentPurchase.setTime(new Date());
             currentPurchase.setUser(currentUser.getUser());
             currentPurchase.setOutlet(currentUser.getUser().getOutlet());

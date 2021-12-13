@@ -25,6 +25,7 @@
             <br/>
             <h:commandButton styleClass="submitButton" id="userLogin" actionListener="#{userBean.login()}" value="Войти" process="@this"/>
         </h:form>
+        <h:outputText value="#{errorBean.message}" styleClass="error"/>
     </div>
 </h:body>
 </html>
